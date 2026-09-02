@@ -18,9 +18,9 @@
   ],
   "skills": "./skills/",
   "interface": {
-    "displayName": "🐔🧱时空",
+    "displayName": "SZTU Connect",
     "shortDescription": "以事件和来源组织可核查记录",
-    "longDescription": "提交一个事件，由 Agent 关联人物、组织、地点、制度、主题和相关事件，并生成类似 Notion／Obsidian 的反向链接；支持多种史体与供应商无关的知识 JSONL。无障碍名称：技大时空。",
+    "longDescription": "SZTU Connect（技大时空）以事件和来源组织可核查的校园记录，由 Agent 关联人物、组织、地点、制度、主题与相关事件，并生成类似 Notion／Obsidian 的反向链接；支持多种史体与供应商无关的知识 JSONL。",
     "developerName": "SZTU Connect contributors",
     "category": "Productivity",
     "capabilities": [
