@@ -2,15 +2,11 @@
 
 ## 🐔🧱构史 · G.O.U.S.H.I.
 
-**Grounded Origins University Stories, History & Interlinks**
+> Grounded Origins University Stories, History & Interlinks
 
-> 以事实为基，以时间为轴，以众声为脉，以链接构史。
-
-*拾校园之片羽，构时代之长卷。*
-
-**技大时空**是一个以事件为核心、以时间为坐标、以来源为依据的深圳技术大学非官方历史记录项目。
-
-[快速开始](#快速开始) · [数据模型](docs/DATA_MODEL.md) · [参与贡献](CONTRIBUTING.md) · [长期目标](#长期目标)
+**以事实为基，以时间为轴，
+以众声为脉，以链接构史。
+拾校园之片羽，构时代之长卷。**
 
 **G — Grounded**
 
@@ -64,6 +60,12 @@
 当一块块散落的故事最终彼此连接——
 
 **「构史」，便把故事构成历史。**
+
+**SZTU Connect · 技大时空**是一个以事件为核心、以时间为坐标、以来源为依据的深圳技术大学历史记录项目。
+
+[快速开始](#快速开始) · [数据模型](docs/DATA_MODEL.md) · [参与贡献](CONTRIBUTING.md) · [长期目标](#长期目标)
+
+
 
 ## 当前可用
 
