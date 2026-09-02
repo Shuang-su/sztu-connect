@@ -1,0 +1,19 @@
+{
+  "schema_version": "0.1.0",
+  "id": "org-example",
+  "type": "node",
+  "kind": "organization",
+  "name": "示例组织（虚构）",
+  "aliases": [],
+  "status": "stub",
+  "summary": null,
+  "source_ids": [],
+  "privacy": {"risk": "none", "handling": "as-recorded", "indexing": "include", "notes": null},
+  "provenance": {
+    "created_by": "human",
+    "created_at": "2026-09-02T00:00:00Z",
+    "contributors": [],
+    "agent_run_id": null,
+    "input_hashes": []
+  }
+}

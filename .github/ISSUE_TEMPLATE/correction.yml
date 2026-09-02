@@ -1,0 +1,32 @@
+name: 核查或更正事件
+description: 为既有 Event 补充支持来源、反证、时间修正或身份消歧。
+body:
+  - type: input
+    id: event
+    attributes:
+      label: Event ID 或页面
+    validations:
+      required: true
+  - type: textarea
+    id: claim
+    attributes:
+      label: 需要核查的 Claim 或关系
+    validations:
+      required: true
+  - type: textarea
+    id: evidence
+    attributes:
+      label: 支持或反驳的来源与定位
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: 建议修改
+  - type: checkboxes
+    id: safety
+    attributes:
+      label: 公开边界
+      options:
+        - label: 内容不含账号凭据、完整证件号、身份接管信息、私人精确住址或实时位置
+          required: true

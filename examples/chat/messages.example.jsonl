@@ -1,0 +1,2 @@
+{"id":"msg-example-1","timestamp":"2024-09-01T10:00:00+08:00","sender_id":"participant-a","sender_display":"示例参与者 A","kind":"text","text":"这是一条虚构消息，仅用于测试结构。","media_ref":null,"reply_to":null,"is_self":false,"redacted":false}
+{"id":"msg-example-2","timestamp":"2024-09-01T10:01:00+08:00","sender_id":"participant-b","sender_display":"示例参与者 B","kind":"text","text":"收到。","media_ref":null,"reply_to":"msg-example-1","is_self":true,"redacted":false}

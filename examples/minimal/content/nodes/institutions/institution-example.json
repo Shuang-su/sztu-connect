@@ -1,0 +1,19 @@
+{
+  "schema_version": "0.1.0",
+  "id": "institution-example",
+  "type": "node",
+  "kind": "institution",
+  "name": "示例制度（虚构）",
+  "aliases": [],
+  "status": "stub",
+  "summary": null,
+  "source_ids": [],
+  "privacy": {"risk": "none", "handling": "as-recorded", "indexing": "include", "notes": null},
+  "provenance": {
+    "created_by": "human",
+    "created_at": "2026-09-02T00:00:00Z",
+    "contributors": [],
+    "agent_run_id": null,
+    "input_hashes": []
+  }
+}

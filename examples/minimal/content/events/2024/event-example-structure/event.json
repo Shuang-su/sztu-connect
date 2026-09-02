@@ -1,0 +1,55 @@
+{
+  "schema_version": "0.1.0",
+  "id": "event-example-structure",
+  "type": "event",
+  "title": "事件结构示例（非史实）",
+  "aliases": [],
+  "status": "source-backed",
+  "time": {
+    "kind": "point",
+    "start": "2024-09",
+    "end": null,
+    "precision": "month",
+    "certainty": "exact",
+    "timezone": "Asia/Shanghai",
+    "original_text": "2024 年 9 月（示例值）"
+  },
+  "summary": "此事件只演示 Event、Node、Source、Collection 与 backlink 的结构，不代表真实校园事件。",
+  "claims": [
+    {
+      "id": "claim-example-purpose",
+      "text": "此事件仅用于演示仓库数据结构，不代表真实校园事件。",
+      "kind": "fact",
+      "certainty": "high",
+      "citations": [
+        {
+          "source_id": "source-example-documentation",
+          "role": "supports",
+          "locator": "examples/minimal",
+          "note": "示例目录说明"
+        }
+      ]
+    }
+  ],
+  "links": [
+    {"relation": "involves", "target_id": "person-example", "claim_ids": ["claim-example-purpose"], "source_ids": ["source-example-documentation"], "note": "虚构关联"},
+    {"relation": "held-by", "target_id": "org-example", "claim_ids": ["claim-example-purpose"], "source_ids": ["source-example-documentation"], "note": "虚构关联"},
+    {"relation": "occurs-at", "target_id": "place-example", "claim_ids": ["claim-example-purpose"], "source_ids": ["source-example-documentation"], "note": "虚构关联"},
+    {"relation": "changes", "target_id": "institution-example", "claim_ids": ["claim-example-purpose"], "source_ids": ["source-example-documentation"], "note": "虚构关联"},
+    {"relation": "about", "target_id": "topic-example", "claim_ids": ["claim-example-purpose"], "source_ids": ["source-example-documentation"], "note": "虚构关联"}
+  ],
+  "privacy": {
+    "risk": "none",
+    "handling": "as-recorded",
+    "indexing": "include",
+    "notes": "全为虚构示例。"
+  },
+  "provenance": {
+    "created_by": "human",
+    "created_at": "2026-09-02T00:00:00Z",
+    "contributors": [],
+    "agent_run_id": null,
+    "input_hashes": []
+  },
+  "narrative": "index.md"
+}

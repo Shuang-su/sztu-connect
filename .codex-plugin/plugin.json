@@ -1,0 +1,37 @@
+{
+  "name": "sztu-connect",
+  "version": "0.1.0",
+  "description": "Event-centered, source-linked local archive workflows for SZTU Connect.",
+  "author": {
+    "name": "SZTU Connect contributors",
+    "url": "https://github.com/Shuang-su"
+  },
+  "homepage": "https://github.com/Shuang-su/sztu-connect",
+  "repository": "https://github.com/Shuang-su/sztu-connect",
+  "license": "Apache-2.0",
+  "keywords": [
+    "archive",
+    "chronology",
+    "fact-checking",
+    "knowledge-base",
+    "sztu"
+  ],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "🐔🧱时空",
+    "shortDescription": "以事件和来源组织可核查记录",
+    "longDescription": "提交一个事件，由 Agent 关联人物、组织、地点、制度、主题和相关事件，并生成类似 Notion／Obsidian 的反向链接；支持多种史体与供应商无关的知识 JSONL。无障碍名称：技大时空。",
+    "developerName": "SZTU Connect contributors",
+    "category": "Productivity",
+    "capabilities": [
+      "Local files",
+      "Structured data",
+      "Fact checking"
+    ],
+    "defaultPrompt": [
+      "根据来源创建一个事件，并自动关联相关目录。",
+      "核查这个事件的论断、来源与双向链接。",
+      "把这些事件组织为编年体、纪传体或典制体。"
+    ]
+  }
+}

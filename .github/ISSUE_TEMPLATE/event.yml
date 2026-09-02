@@ -1,0 +1,43 @@
+name: 提交一个事件
+description: 提供事件、时间、来源和相关对象；Agent 可据此建立 Event 与双向链接索引。
+body:
+  - type: input
+    id: title
+    attributes:
+      label: 事件标题
+      description: 中性描述发生了什么。
+    validations:
+      required: true
+  - type: input
+    id: time
+    attributes:
+      label: 时间及精度
+      description: 例如 2024-09、约 2021 年、2020-03 至 2020-06；不知道就写未知。
+    validations:
+      required: true
+  - type: textarea
+    id: description
+    attributes:
+      label: 事件说明
+      description: 区分亲历、事实、主张、解释和不确定内容。
+    validations:
+      required: true
+  - type: textarea
+    id: sources
+    attributes:
+      label: 来源与定位
+      description: 提供公开 URL、文档名称、页码、段落、消息 ID 或时间码。
+    validations:
+      required: true
+  - type: textarea
+    id: links
+    attributes:
+      label: 可能相关的目录
+      description: 人物、组织、地点、制度、主题或相关事件；不确定是否同一对象时请说明。
+  - type: checkboxes
+    id: safety
+    attributes:
+      label: 公开边界
+      options:
+        - label: 内容不含账号凭据、完整证件号、身份接管信息、私人精确住址或实时位置
+          required: true

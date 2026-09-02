@@ -1,0 +1,10 @@
+{
+  "chunk_count": 0,
+  "chunking_profile": "structured-fields-v1",
+  "chunks_path": "chunks.jsonl",
+  "chunks_sha256": "sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "dataset_revision": "sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "embedding": null,
+  "format": "sztu-connect-knowledge-jsonl@0.1",
+  "schema_version": "0.1.0"
+}

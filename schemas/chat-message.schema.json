@@ -1,0 +1,33 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:sztu-connect:schema:chat-message:0.1.0",
+  "title": "SZTU Connect normalized chat message",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "id",
+    "timestamp",
+    "sender_id",
+    "sender_display",
+    "kind",
+    "text",
+    "media_ref",
+    "reply_to",
+    "is_self",
+    "redacted"
+  ],
+  "properties": {
+    "id": {"type": "string", "pattern": "^msg-[a-zA-Z0-9._-]+$"},
+    "timestamp": {"type": ["string", "null"], "format": "date-time"},
+    "sender_id": {"type": "string", "pattern": "^[a-z0-9][a-z0-9-]*$"},
+    "sender_display": {"type": "string", "minLength": 1, "maxLength": 120},
+    "kind": {
+      "enum": ["text", "image", "video", "audio", "file", "link", "system", "redacted", "other"]
+    },
+    "text": {"type": ["string", "null"], "maxLength": 20000},
+    "media_ref": {"type": ["string", "null"]},
+    "reply_to": {"type": ["string", "null"]},
+    "is_self": {"type": "boolean"},
+    "redacted": {"type": "boolean"}
+  }
+}

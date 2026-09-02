@@ -1,0 +1,39 @@
+{
+  "schema_version": "0.1.0",
+  "id": "source-example-documentation",
+  "type": "source",
+  "title": "SZTU Connect 结构示例说明",
+  "source_kind": "repository",
+  "creator": "SZTU Connect contributors",
+  "publisher": null,
+  "locator": {
+    "original_url": "https://github.com/Shuang-su/sztu-connect",
+    "archive_url": null,
+    "public_path": null,
+    "identifier": "examples/minimal"
+  },
+  "dates": {
+    "published_at": "2026-09-02",
+    "accessed_at": null,
+    "captured_at": null
+  },
+  "hashes": [],
+  "access": "public",
+  "rights": {
+    "status": "self-owned",
+    "license": "CC-BY-SA-4.0",
+    "note": "仅用于解释示例结构。"
+  },
+  "reliability": {
+    "kind": "primary",
+    "independence_group": "sztu-connect-repository",
+    "note": "示例结构本身的一手说明。"
+  },
+  "privacy": {
+    "risk": "none",
+    "handling": "as-recorded",
+    "indexing": "include",
+    "notes": null
+  },
+  "notes": "此来源和所有 example ID 仅用于演示，不代表真实校园事件。"
+}

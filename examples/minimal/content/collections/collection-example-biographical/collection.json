@@ -1,0 +1,15 @@
+{
+  "schema_version": "0.1.0",
+  "id": "collection-example-biographical",
+  "type": "collection",
+  "form": "biographical",
+  "title": "纪传体结构示例",
+  "summary": "仅演示围绕人物 Node 组织 Event。",
+  "order": "chronological",
+  "focus_ids": ["person-example"],
+  "event_ids": ["event-example-structure"],
+  "related_collection_ids": [],
+  "privacy": {"risk": "none", "handling": "as-recorded", "indexing": "include", "notes": null},
+  "provenance": {"created_by": "human", "created_at": "2026-09-02T00:00:00Z", "contributors": [], "agent_run_id": null, "input_hashes": []},
+  "narrative": null
+}

@@ -1,0 +1,97 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:sztu-connect:schema:node:0.1.0",
+  "title": "SZTU Connect directory node",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "id",
+    "type",
+    "kind",
+    "name",
+    "aliases",
+    "status",
+    "summary",
+    "source_ids",
+    "privacy",
+    "provenance"
+  ],
+  "properties": {
+    "schema_version": {"const": "0.1.0"},
+    "id": {
+      "type": "string",
+      "pattern": "^(person|org|place|institution|topic)-[a-z0-9][a-z0-9-]*$",
+      "maxLength": 240
+    },
+    "type": {"const": "node"},
+    "kind": {"enum": ["person", "organization", "place", "institution", "topic"]},
+    "name": {"type": "string", "minLength": 1, "maxLength": 240},
+    "aliases": {
+      "type": "array",
+      "items": {"type": "string", "minLength": 1, "maxLength": 240},
+      "maxItems": 50,
+      "uniqueItems": true
+    },
+    "status": {"enum": ["stub", "described"]},
+    "summary": {"type": ["string", "null"], "maxLength": 2000},
+    "source_ids": {
+      "type": "array",
+      "items": {"type": "string", "pattern": "^source-[a-z0-9][a-z0-9-]*$"},
+      "uniqueItems": true
+    },
+    "privacy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["risk", "handling", "indexing"],
+      "properties": {
+        "risk": {"enum": ["none", "ordinary-personal", "sensitive", "prohibited"]},
+        "handling": {"enum": ["as-recorded", "minimized", "redacted", "metadata-only", "restricted"]},
+        "indexing": {"enum": ["include", "exclude"]},
+        "notes": {"type": ["string", "null"], "maxLength": 1000}
+      }
+    },
+    "provenance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["created_by", "created_at", "input_hashes"],
+      "properties": {
+        "created_by": {"enum": ["human", "agent-assisted", "imported"]},
+        "created_at": {"type": "string", "format": "date-time"},
+        "contributors": {
+          "type": "array",
+          "items": {"type": "string", "minLength": 1, "maxLength": 200},
+          "uniqueItems": true
+        },
+        "agent_run_id": {"type": ["string", "null"], "maxLength": 300},
+        "input_hashes": {
+          "type": "array",
+          "items": {"type": "string", "pattern": "^sha256:[a-f0-9]{64}$"},
+          "uniqueItems": true
+        }
+      }
+    }
+  },
+  "allOf": [
+    {
+      "if": {"properties": {"kind": {"const": "person"}}},
+      "then": {"properties": {"id": {"pattern": "^person-"}}}
+    },
+    {
+      "if": {"properties": {"kind": {"const": "organization"}}},
+      "then": {"properties": {"id": {"pattern": "^org-"}}}
+    },
+    {
+      "if": {"properties": {"kind": {"const": "place"}}},
+      "then": {"properties": {"id": {"pattern": "^place-"}}}
+    },
+    {
+      "if": {"properties": {"kind": {"const": "institution"}}},
+      "then": {"properties": {"id": {"pattern": "^institution-"}}}
+    },
+    {
+      "if": {"properties": {"kind": {"const": "topic"}}},
+      "then": {"properties": {"id": {"pattern": "^topic-"}}}
+    }
+  ]
+}

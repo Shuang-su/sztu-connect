@@ -1,0 +1,45 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:sztu-connect:schema:submission:0.1.0",
+  "title": "SZTU Connect local intake manifest",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "submission_id",
+    "created_at",
+    "source_path_private",
+    "mode",
+    "aggregate_sha256",
+    "files",
+    "warnings"
+  ],
+  "properties": {
+    "schema_version": {"const": "0.1.0"},
+    "submission_id": {"type": "string", "pattern": "^submission-[a-f0-9]{16}$"},
+    "created_at": {"type": "string", "format": "date-time"},
+    "source_path_private": {"type": "string", "minLength": 1},
+    "mode": {"const": "dry-run"},
+    "aggregate_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "files": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["path", "size_bytes", "sha256", "mime_guess", "risk_flags"],
+        "properties": {
+          "path": {"type": "string"},
+          "size_bytes": {"type": "integer", "minimum": 0},
+          "sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+          "mime_guess": {"type": "string"},
+          "risk_flags": {
+            "type": "array",
+            "items": {"type": "string"},
+            "uniqueItems": true
+          }
+        }
+      }
+    },
+    "warnings": {"type": "array", "items": {"type": "string"}}
+  }
+}

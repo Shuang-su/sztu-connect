@@ -1,0 +1,15 @@
+{
+  "schema_version": "0.1.0",
+  "id": "collection-example-institutional",
+  "type": "collection",
+  "form": "institutional",
+  "title": "典制体结构示例",
+  "summary": "仅演示围绕制度 Node 组织 Event。",
+  "order": "chronological",
+  "focus_ids": ["institution-example"],
+  "event_ids": ["event-example-structure"],
+  "related_collection_ids": [],
+  "privacy": {"risk": "none", "handling": "as-recorded", "indexing": "include", "notes": null},
+  "provenance": {"created_by": "human", "created_at": "2026-09-02T00:00:00Z", "contributors": [], "agent_run_id": null, "input_hashes": []},
+  "narrative": null
+}

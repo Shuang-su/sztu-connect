@@ -1,0 +1,118 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:sztu-connect:schema:source:0.1.0",
+  "title": "SZTU Connect source",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "id",
+    "type",
+    "title",
+    "source_kind",
+    "locator",
+    "dates",
+    "hashes",
+    "access",
+    "rights",
+    "reliability",
+    "privacy",
+    "notes"
+  ],
+  "properties": {
+    "schema_version": {"const": "0.1.0"},
+    "id": {"type": "string", "pattern": "^source-[a-z0-9][a-z0-9-]*$", "maxLength": 240},
+    "type": {"const": "source"},
+    "title": {"type": "string", "minLength": 1, "maxLength": 400},
+    "source_kind": {
+      "enum": [
+        "official-web",
+        "website",
+        "document",
+        "photo",
+        "video",
+        "audio",
+        "chat-export",
+        "social-post",
+        "oral-history",
+        "repository",
+        "other"
+      ]
+    },
+    "creator": {"type": ["string", "null"], "maxLength": 300},
+    "publisher": {"type": ["string", "null"], "maxLength": 300},
+    "locator": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["original_url", "archive_url", "public_path", "identifier"],
+      "properties": {
+        "original_url": {"type": ["string", "null"], "format": "uri"},
+        "archive_url": {"type": ["string", "null"], "format": "uri"},
+        "public_path": {"type": ["string", "null"]},
+        "identifier": {"type": ["string", "null"], "maxLength": 500}
+      }
+    },
+    "dates": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["published_at", "accessed_at", "captured_at"],
+      "properties": {
+        "published_at": {
+          "type": ["string", "null"],
+          "pattern": "^\\d{4}(?:-\\d{2}(?:-\\d{2})?)?$"
+        },
+        "accessed_at": {"type": ["string", "null"], "format": "date-time"},
+        "captured_at": {"type": ["string", "null"], "format": "date-time"}
+      }
+    },
+    "hashes": {
+      "type": "array",
+      "maxItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["algorithm", "value"],
+        "properties": {
+          "algorithm": {"const": "sha256"},
+          "value": {"type": "string", "pattern": "^[a-f0-9]{64}$"}
+        }
+      },
+      "uniqueItems": true
+    },
+    "access": {"enum": ["public", "metadata-only"]},
+    "rights": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "license", "note"],
+      "properties": {
+        "status": {
+          "enum": ["self-owned", "licensed", "public-domain", "quoted", "link-only", "unknown"]
+        },
+        "license": {"type": ["string", "null"], "maxLength": 200},
+        "note": {"type": ["string", "null"], "maxLength": 2000}
+      }
+    },
+    "reliability": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "independence_group", "note"],
+      "properties": {
+        "kind": {"enum": ["primary", "secondary", "tertiary", "unknown"]},
+        "independence_group": {"type": ["string", "null"], "maxLength": 200},
+        "note": {"type": ["string", "null"], "maxLength": 2000}
+      }
+    },
+    "privacy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["risk", "handling", "indexing"],
+      "properties": {
+        "risk": {"enum": ["none", "ordinary-personal", "sensitive", "prohibited"]},
+        "handling": {"enum": ["as-recorded", "minimized", "redacted", "metadata-only", "restricted"]},
+        "indexing": {"enum": ["include", "exclude"]},
+        "notes": {"type": ["string", "null"], "maxLength": 1000}
+      }
+    },
+    "notes": {"type": ["string", "null"], "maxLength": 4000}
+  }
+}

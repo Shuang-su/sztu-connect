@@ -1,0 +1,15 @@
+{
+  "schema_version": "0.1.0",
+  "id": "collection-example-thematic",
+  "type": "collection",
+  "form": "thematic",
+  "title": "专题结构示例",
+  "summary": "仅演示围绕主题 Node 组织 Event。",
+  "order": "curated",
+  "focus_ids": ["topic-example"],
+  "event_ids": ["event-example-structure"],
+  "related_collection_ids": [],
+  "privacy": {"risk": "none", "handling": "as-recorded", "indexing": "include", "notes": null},
+  "provenance": {"created_by": "human", "created_at": "2026-09-02T00:00:00Z", "contributors": [], "agent_run_id": null, "input_hashes": []},
+  "narrative": null
+}
