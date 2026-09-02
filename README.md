@@ -1,7 +1,7 @@
 # SZTU Connect
 <br>
 
-## **「🐔🧱构史」** ·  G.O.U.S.H.I.
+## **🐔🧱构史** ·  G.O.U.S.H.I.
 
 ### Grounded Origins University Stories, History & Interlinks
 
