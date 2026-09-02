@@ -30,4 +30,4 @@
 
 ## Checkpoint
 
-实现 checkpoint SHA：待首次本地 checkpoint 后补充。
+实现 checkpoint SHA：`f921dc0f3ecc76d3a9abdf0f51d0153e296dd933`。
