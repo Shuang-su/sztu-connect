@@ -22,7 +22,7 @@
 
 **「构史」，便把故事构成历史。**
 
-###Grounded Origins University Stories, History & Interlinks
+### Grounded Origins University Stories, History & Interlinks
 **G — Grounded**
 有据可依。
 *每一段记录皆有所本，让事实落地。**
