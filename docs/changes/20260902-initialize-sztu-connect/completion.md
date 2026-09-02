@@ -28,6 +28,14 @@
 
 没有加入真实校园事件，没有 MCP/WebMCP、网站、部署、Release、远程 embedding 或向量数据库写入。
 
+## 发布
+
+- 已发布到个人公开仓库 `https://github.com/Shuang-su/sztu-connect`，默认分支为 `main`。
+- Wiki 已关闭，避免形成第二套事实真源；Issues 与 Event／更正表单可用。
+- 已启用 GitHub Private Vulnerability Reporting，使公开 Issue 之外有凭据与隐私泄露报告入口。
+- 没有创建 PR、tag、Release、部署、CODEOWNERS 或角色型分支规则。
+
 ## Checkpoint
 
 实现 checkpoint SHA：`f921dc0f3ecc76d3a9abdf0f51d0153e296dd933`。
+验证记录 checkpoint SHA：`7d745878991eb8b61888f22ee872d4c2cb791441`。
