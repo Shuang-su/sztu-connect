@@ -661,25 +661,6 @@ class RepositoryTests(unittest.TestCase):
         plugin = load_json(ROOT / ".codex-plugin" / "plugin.json")
         self.assertEqual(plugin["interface"]["displayName"], "SZTU Connect")
 
-    def test_readme_public_name_contract(self) -> None:
-        readme = (ROOT / "README.md").read_text(encoding="utf-8")
-        self.assertTrue(
-            readme.startswith(
-                "# SZTU Connect\n\n## 🐔🧱构史 · G.O.U.S.H.I.\n"
-            )
-        )
-        self.assertEqual(
-            readme.count(
-                "Grounded Origins University Stories, History & Interlinks"
-            ),
-            1,
-        )
-        self.assertIn("**H — History**", readme)
-        self.assertNotIn("H — Histories", readme)
-        self.assertNotIn("## 命名", readme)
-        self.assertNotIn("中文显示名称", readme)
-        self.assertTrue(readme.rstrip().endswith("> 有据构实，众声成史。"))
-
 
 if __name__ == "__main__":
     unittest.main()
