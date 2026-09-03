@@ -4,7 +4,7 @@
 
 ## 交付结果
 
-本地实现和校验已完成；提交、main 集成与远端读回结果将在本记录的交付检查点补齐。
+源码、相关技能与文档已推送到公开仓库的 main，实现检查点通过本地验证和 GitHub CI。本记录补齐提交、远端读回、并行工作保护与验证证据。
 
 - 根目录新增 [工具目录](../../../importers/README.md) 和 [登记表](../../../importers/registry.json)，保存 CipherTalk-SafeFork 与 WeChatMsg 两份固定源码快照、许可副本与来源说明。
 - CipherTalk `v2026.829.0` 的 DMG / EXE 使用上游固定 Release 直链；本轮没有下载、安装、重托管或执行安装包，没有配置 Git LFS。
@@ -21,12 +21,13 @@
 
 两份源码来自 GitHub 官方 codeload 的完整提交地址，未重新打包。逐文件重算 Git blob/tree，与 GitHub 固定提交 API 的 tree 完全一致：CipherTalk 为 `6096cdfa8aa85439f6a377a9313ba3b25aecc365`，WeChatMsg 为 `f0ff70068c3ab2ba1592afbb2f684b821d9d0209`。独立许可副本均与归档内原件相同，包括 WeChatMsg 原许可证没有结尾换行这一字节细节。
 
-安装包摘要仅从上游 Release API 读取并明确标注；两条实际下载入口 HEAD 均为 HTTP 200。报告、工具目录和聊天说明中的 43 个去重外部链接均完成 HEAD 可达性检查；链接可达不替代正文证据或二进制验收。
+安装包摘要仅从上游 Release API 读取并明确标注；两条实际下载入口 HEAD 均为 HTTP 200。报告、工具目录和聊天说明中的 43 个去重外部链接均完成 HEAD 可达性检查。推送后又用未附带账号凭据的 HEAD 检查两份本仓库源码文件的公开 raw 地址，均为 HTTP 200；远端 Git tree API 中两份归档的 blob ID 与大小也与本地一致。链接可达不替代正文证据或二进制验收。
 
 ## 测试与检查
 
 - `python3 importers/verify_archives.py`：两份源码的 SHA-256、大小、文件树、路径与许可检查通过，不联网、不解包、不运行上游代码。
 - 全量单元测试：**67 项通过**，其中新增 **14 项** 存档回归测试，覆盖损坏、内容替换、许可替换、固定提交、路径冲突、越界、链接、特殊成员、容量限制、Git 签出字节保真和失败输出。
+- GitHub Linux CI 的 [Checks 33720487037](https://github.com/Shuang-su/sztu-connect/actions/runs/33720487037) 对实现提交 `6eb5483d60cac2387854c8d3d762b733d28accb4` 返回 `completed / success`；包括离线存档校验、全量单测、项目检查和派生文件差异检查。
 - 三个修改技能均通过 skill-creator 的 `quick_validate.py`；Python 编译检查通过。
 - `doctor`、`validate --json`、`privacy-scan --json`、`check --json` 通过。正式 Event / Node / Collection / Source 均保持 0，不把第三方工具或虚构测试导入正式索引。
 - 隐私扫描为 `block: 0, review: 6`：两份 tar.gz 和三个非标准扩展名的许可副本被标为未扫描二进制；另一个手机号模式命中实际是公开 GitHub Actions run ID。许可文本与归档文本已另行读取检查，不通过修改扫描器压掉提示。
@@ -51,6 +52,8 @@ Deep research 使用指定四个项目及两个实质不同的替代路线，先
 
 通用网页工具曾不可用，关键事实改用直接 GitHub API、固定源文件、构建日志和 Gitee 公开 refs 验证。开发环境首次跳过构建隔离安装时缺少 setuptools 后端；按项目声明恢复标准隔离安装后成功，未修改依赖锁或全局环境。
 
+首次大文件 HTTPS 推送等待超过 5 分钟仍未收到完成响应，且远端 main 未更新；终止该请求后再次读回远端，只对同一提交使用临时 HTTP/1.1、请求缓冲和低速超时参数重试，随后推送成功。未改变任何持久 Git 配置，未强推。GitHub 对 WeChatMsg 的 55.35 MB 源码包给出超过 50 MB 建议值的提示，但没有拒绝该文件；按已确认方案保留普通 Git 文件，不改用 LFS。
+
 文本凭据模式检查实际读取 CipherTalk 769 个、WeChatMsg 113 个可解码文本文件。命中项为代码表达式、配置键、占位内容或模型数据的小数数字片段；本次未识别出真实凭据。其余二进制及图片内容没有完成恶意软件、可复现构建或全组件许可审计，不能据此保证软件安全。
 
 已知边界：
@@ -65,5 +68,8 @@ Deep research 使用指定四个项目及两个实质不同的替代路线，先
 
 - 起点：`main` / `origin/main` = `eb30c774db2f76752a0ed6d9da02ee42d6aeac11`，原 checkout 干净。
 - 隔离分支：`codex/chat-tool-archives`；缓存、下载暂存、报告源、测试输入与测试输出均留在忽略的项目工作目录。
-- 本地检查点、远端 SHA 与 CI 结果：交付时补充，不预先宣称已推送。
-- 已确认交付目标为 main；不创建 PR、Release、tag 或部署，不强推，不改写用户已有历史。
+- 实现检查点：[6eb5483d60cac2387854c8d3d762b733d28accb4](https://github.com/Shuang-su/sztu-connect/commit/6eb5483d60cac2387854c8d3d762b733d28accb4)，`feat(importers): preserve pinned chat tools and provenance`；23 个本任务文件，包含全部实体源码、技能、研究与本地验证记录。
+- 集成时发现原工作目录已切到并行任务的 `codex/agent-first-onboarding`。保留该分支及其工作文件，另建私有 `chat-tool-main` 工作目录，使用 `git merge --ff-only` 将实现检查点集成到 main，再进行推送；没有切换或覆盖并行任务的原 checkout。
+- GitHub branch API 已读回 main 为实现检查点，仓库为 `public`；两份远端归档 blob 分别为 `4686be520fd8f78f9339ba538f3b046315a9c09a` 与 `84c4bf3d0da9aee6445ac2f088460722d13c2447`，大小与本地相同。
+- 本记录的最终补记是实现检查点之后的文档提交，不改动源码归档、技能或运行代码；提交号可由本文件 Git 历史获取，最终 main 的读回结果随交付回复提供。
+- 没有创建 PR、Release、tag 或部署，没有强推或改写用户已有历史。本次公共内容仅为软件存档、来源说明和虚构测试说明，无真实聊天、账号数据或凭据。
