@@ -16,3 +16,5 @@ description: Trace SZTU Connect event claims to source locators, compare support
 Do not assign governance roles or turn a fact-check report into an authority-based publication decision.
 
 Keep three findings separate: tool provenance, continuity of the supplied export's bytes, and the truth of a message's assertion. A matching tool/archive checksum or an upstream “Safe” name does not prove either chat authenticity or a Claim. Record actual inspection and untested assumptions explicitly; do not require access to an account or private database to complete a limited, read-only evidence report.
+
+For an onboarding suggestion, use [the shared exploration flow](../../docs/GETTING_STARTED.md#5-探索材料与历史线索) for scope and reporting, and assess only the available evidence. A Computer History observation should lead back to the original page, file or message; a retained summary is not independent corroboration. Distinguish event, message, publication, export, file-metadata and observation times rather than filling an unknown event date from the time someone opened a file.

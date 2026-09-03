@@ -13,7 +13,8 @@ ROOT = Path(__file__).resolve().parents[1]
 DOCUMENTS = [
     "README.md", "AGENTS.md", "CLAUDE.md", "CONTRIBUTING.md",
     "docs/GETTING_STARTED.md", "docs/PLUGIN.md", "docs/ONBOARDING_TEST_MATRIX.md",
-    "skills/setup-sztu-connect/SKILL.md",
+    "docs/CHAT_IMPORT.md",
+    *[path.relative_to(ROOT).as_posix() for path in sorted((ROOT / "skills").glob("*/SKILL.md"))],
 ]
 
 
@@ -70,6 +71,20 @@ class OnboardingDocumentTests(unittest.TestCase):
         self.assertEqual(imports, ["AGENTS.md"])
         self.assertTrue((ROOT / imports[0]).is_file())
         self.assertFalse((ROOT / ".agents/skills/setup-sztu-connect").exists())
+
+    def test_starter_metadata_does_not_register_native_capabilities_as_services(self) -> None:
+        manifest = json.loads((ROOT / ".codex-plugin/plugin.json").read_text(encoding="utf-8"))
+        self.assertEqual(manifest["name"], "sztu-connect")
+        for field in ("mcpServers", "apps", "hooks"):
+            self.assertNotIn(field, manifest)
+        self.assertFalse((ROOT / ".mcp.json").exists())
+        self.assertFalse((ROOT / ".app.json").exists())
+        # Check discoverability and the user-facing consent entry, not prose layout.
+        starter = manifest["interface"]["defaultPrompt"][0]
+        self.assertIn("Computer Use", starter)
+        self.assertIn("Computer History", starter)
+        self.assertIn("我授权", starter)
+        self.assertIn("setup-sztu-connect", starter)
 
 
 if __name__ == "__main__":
