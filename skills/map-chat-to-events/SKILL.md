@@ -1,13 +1,22 @@
 ---
 name: map-chat-to-events
-description: Map a lawfully obtained, user-selected chat export into SZTU Connect chat JSONL, Sources, and candidate Events while preserving message IDs, time uncertainty, and reply links. Use for chat-history material; this instruction-only skill does not decrypt databases or provide an automatic platform parser.
+description: Help choose a pinned third-party chat export tool or use a user-selected export as a traceable SZTU Connect Source; map to chat JSONL and candidate Events only when requested. Use for chat-history material, not account access or an automatic platform parser.
 ---
 
 # Map chat material
 
-1. Work in a user-selected SZTU Connect clone with the pinned local CLI installed as described in `README.md`. Read `docs/CHAT_IMPORT.md`. Inventory the original through `sztu-connect ingest`; do not decrypt, execute, modify, or publish it.
-2. Map selected messages to `schemas/chat-message.schema.json`. Preserve display names when relevant and lawful; do not anonymize by default.
-3. Validate with `sztu-connect validate-chat <file> --json`. Rendering is optional and writes only under `.work/`.
-4. Create a Source record for the selected export or excerpt. Use message IDs as Citation locators.
-5. A statement in chat remains a source statement. Create an Event Claim with the appropriate `memory`, `allegation`, `uncertain`, or `fact` kind; do not promote it to fact merely because multiple messages repeat it.
-6. Link the candidate Event to existing Nodes only when identity is clear.
+Work in the user-selected SZTU Connect clone, not the plugin cache. Read [the chat workflow](../../docs/CHAT_IMPORT.md); use the pinned local CLI environment from `README.md` when a CLI operation is needed.
+
+## Route the request
+
+- **No export yet:** consult [the tool directory](../../importers/README.md) and `importers/registry.json`. Match the user's OS, CPU architecture, desktop WeChat version or iOS-backup route. Ask only for missing information that changes the choice. Give the fixed upstream download or preserved source entry and its actual limitations; a source archive is not a ready-to-run installer. Stop at guidance unless the user requests further action. Do not silently download, install, rebuild, launch a tool, extract keys, or access an account.
+- **Export already supplied:** do not send the user back to export it again. Inspect only the selected files and calculate their hashes read-only. If a saved private inventory is useful and within the allowed output scope, use `sztu-connect ingest <path> --dry-run --json`; despite its name, this writes a manifest under `.work/`. Do not run it for a strictly read-only request or an output scope that excludes `.work/`. Keep originals unchanged; a Source can cite the original export directly. JSONL conversion is optional, not an admission requirement.
+- **Structured mapping requested:** follow the format notes in `docs/CHAT_IMPORT.md` and `schemas/chat-message.schema.json`. Respect the user's private output scope (normally `.work/`), validate with `sztu-connect validate-chat <file> --json`, and render only if useful or requested. The renderer requires an output under `.work/`; do not silently widen a narrower output scope. Keep a locator mapping back to the original; the renderer is not an independent source.
+
+## Preserve the evidence
+
+Record the actual exporter/version, export scope, file SHA-256 and available original message locators. Preserve large server IDs as strings, and distinguish them from database-local IDs or export-array indexes. Keep source text, original time and timezone uncertainty, reply relationships and relevant display names. Missing identity is not permission to infer an account or merge names.
+
+When asked to create records, create Source metadata before candidate Events. Cite the selected file and precise original message location, not the importer's release URL. Preserve a truthful identifier if the original is private; do not invent a public URL or publish the original merely to make the citation clickable.
+
+A matching archive hash establishes which tool snapshot was preserved; an export hash establishes which supplied bytes were inventoried. Neither proves that the export was unedited or that statements in it are true. Choose the appropriate `memory`, `allegation`, `uncertain`, or `fact` Claim kind, retain counterevidence, and link Nodes only on a clear identity match. Repeated or re-exported messages do not become independent corroboration.

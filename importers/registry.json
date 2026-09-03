@@ -1,0 +1,248 @@
+{
+  "schema_version": 1,
+  "researched_on": "2026-09-03",
+  "scope": "Upstream tool provenance and downloads, not campus Source records or a platform parser.",
+  "tools": [
+    {
+      "id": "ciphertalk",
+      "name": "CipherTalk-SafeFork",
+      "role": "primary",
+      "version": "2026.829.0",
+      "version_kind": "release-tag",
+      "repository": "https://github.com/mintleaf84/CipherTalk-SafeFork",
+      "original_repository": "https://github.com/ILoveBingLu/CipherTalk",
+      "commit": "acf221c11ecb1afae32e88885b2309dd39f0f161",
+      "git_tree": "6096cdfa8aa85439f6a377a9313ba3b25aecc365",
+      "commit_signature_verified": false,
+      "provenance_note": "The pinned commit changes only appUpdateService.ts; its parent 098f15e2fa2a6b879bdf18d6741eb0229921beb9 is preserved by olansoft/CipherTalk-SafeFork. SafeFork is not a security certification.",
+      "source_archive": {
+        "path": "wechat/ciphertalk/2026.829.0/CipherTalk-SafeFork-acf221c11ecb1afae32e88885b2309dd39f0f161.tar.gz",
+        "url": "https://codeload.github.com/mintleaf84/CipherTalk-SafeFork/tar.gz/acf221c11ecb1afae32e88885b2309dd39f0f161",
+        "prefix": "CipherTalk-SafeFork-acf221c11ecb1afae32e88885b2309dd39f0f161",
+        "size_bytes": 39412192,
+        "sha256": "fb4dd7f75320dd3b301d8c62f8f76731b03ff08a35b4f3e1da7c1e5fb365dffa",
+        "retrieved_on": "2026-09-03",
+        "license_copies": [
+          {
+            "archive_member": "LICENSE",
+            "path": "wechat/ciphertalk/2026.829.0/LICENSE.upstream",
+            "declared_license": "CC-BY-NC-SA-4.0 with upstream explanatory terms",
+            "scope": "Desktop project"
+          },
+          {
+            "archive_member": "CipherTalk-CLI/LICENSE",
+            "path": "wechat/ciphertalk/2026.829.0/LICENSE.CLI",
+            "declared_license": "MIT",
+            "scope": "CipherTalk-CLI subproject, not the desktop release"
+          }
+        ]
+      },
+      "compatibility": {
+        "platforms": [
+          "Windows 10/11 x64",
+          "macOS Apple Silicon arm64"
+        ],
+        "wechat_versions": "No exhaustive exact client-version matrix found; do not infer support for all 4.x patches.",
+        "evidence": "Upstream README and release build jobs; not an end-to-end export test.",
+        "runtime_tested": false,
+        "preferred_export": "Desktop detailed JSON with rawContent and string platformMessageId, plus selected media.",
+        "limitations": [
+          "Native dependency source and reproducible builds are not fully verified.",
+          "Release build jobs skipped code signing.",
+          "No supplied Intel Mac or Windows ARM64 installer is implied by this release."
+        ]
+      },
+      "release": {
+        "tag": "v2026.829.0",
+        "id": 380627723,
+        "immutable": false,
+        "url": "https://github.com/mintleaf84/CipherTalk-SafeFork/releases/tag/v2026.829.0",
+        "build_url": "https://github.com/mintleaf84/CipherTalk-SafeFork/actions/runs/33525868161"
+      },
+      "downloads": [
+        {
+          "filename": "CipherTalk-2026.829.0-Setup.dmg",
+          "platform": "macOS",
+          "arch": "arm64",
+          "asset_id": 539757511,
+          "size_bytes": 221408494,
+          "sha256": "8fe684b5a022478715f7269a36358b48d9f813c4165056fba8d76b70f824d7f8",
+          "url": "https://github.com/mintleaf84/CipherTalk-SafeFork/releases/download/v2026.829.0/CipherTalk-2026.829.0-Setup.dmg",
+          "verification": "upstream-api-digest-only",
+          "local_payload_archived": false,
+          "http_head_status": 200,
+          "checked_on": "2026-09-03"
+        },
+        {
+          "filename": "CipherTalk-2026.829.0-Setup.exe",
+          "platform": "Windows",
+          "arch": "x64",
+          "asset_id": 539757514,
+          "size_bytes": 162366374,
+          "sha256": "1c01bc70b656a9032c659a826864be96bf1338df1e26a0911908f86329a33bc1",
+          "url": "https://github.com/mintleaf84/CipherTalk-SafeFork/releases/download/v2026.829.0/CipherTalk-2026.829.0-Setup.exe",
+          "verification": "upstream-api-digest-only",
+          "local_payload_archived": false,
+          "http_head_status": 200,
+          "checked_on": "2026-09-03"
+        }
+      ]
+    },
+    {
+      "id": "wechatmsg",
+      "name": "WeChatMsg",
+      "role": "windows-historical-source-backup",
+      "version": "3.0.0",
+      "version_kind": "source-snapshot",
+      "repository": "https://github.com/LC044/WeChatMsg",
+      "commit": "9457ecdad74826ebede9a040b1d86d986c968f1e",
+      "git_tree": "f0ff70068c3ab2ba1592afbb2f684b821d9d0209",
+      "commit_signature_verified": false,
+      "recovery_mirrors": [
+        {
+          "repository": "https://github.com/tqjason/WeChatMsg",
+          "commit": "14b466dcc4c60b43d9d79301e489c8d6029daed4",
+          "relationship": "Merge includes the original pinned commit; only an additional sync workflow differs."
+        }
+      ],
+      "source_archive": {
+        "path": "wechat/wechatmsg/3.0.0-9457ecd/WeChatMsg-9457ecdad74826ebede9a040b1d86d986c968f1e.tar.gz",
+        "url": "https://codeload.github.com/LC044/WeChatMsg/tar.gz/9457ecdad74826ebede9a040b1d86d986c968f1e",
+        "prefix": "WeChatMsg-9457ecdad74826ebede9a040b1d86d986c968f1e",
+        "size_bytes": 58035722,
+        "sha256": "ceb16f1ef59ad3fec58fba41b6001a717ca79a9c0e5a0b660fae33626ae633bd",
+        "retrieved_on": "2026-09-03",
+        "license_copies": [
+          {
+            "archive_member": "LICENSE",
+            "path": "wechat/wechatmsg/3.0.0-9457ecd/LICENSE.upstream",
+            "declared_license": "MIT",
+            "scope": "Pinned project source; bundled dependencies retain their own licenses."
+          }
+        ]
+      },
+      "compatibility": {
+        "platforms": [
+          "Windows; upstream excludes Windows 7 and macOS"
+        ],
+        "wechat_versions": "Explicit historical adaptation for 4.0.3; 157 discrete 3.x configuration entries. Not a guarantee for every 3.x or 4.x version.",
+        "evidence": "Original author commit, example/README.md and wxManager/decrypt/version_list.json.",
+        "runtime_tested": false,
+        "preferred_export": "HTML with its .html.json sidecar and selected media; not exporter_json.py training output.",
+        "limitations": [
+          "No verified long-lived GitHub installer for this exact commit.",
+          "Source examples require configuration and dependencies; not a complete CLI.",
+          "requirements.txt does not list every imported dependency.",
+          "Bundled ffmpeg executables are unmodified; their reproducible-build and component-license audit is incomplete."
+        ]
+      },
+      "upstream_export_entry": "example/3-exporter.py",
+      "downloads": []
+    },
+    {
+      "id": "pywxdump",
+      "name": "PyWxDump",
+      "role": "catalog-only-legacy",
+      "version": "3.1.45",
+      "version_kind": "source-snapshot",
+      "repository": "https://github.com/xaoyaoo/PyWxDump",
+      "commit": "d62e846ff6e90a57999afdc0cc003b599624e8cb",
+      "recovery_mirrors": [
+        {
+          "repository": "https://github.com/PwnDexter/PyWxDump",
+          "commit": "d62e846ff6e90a57999afdc0cc003b599624e8cb",
+          "relationship": "Same commit and Git tree preserved in a direct fork."
+        }
+      ],
+      "source_archive": null,
+      "declared_source_license": "MIT",
+      "compatibility": {
+        "platforms": [
+          "Windows 10 x64 or newer (upstream FAQ)"
+        ],
+        "wechat_versions": "66 discrete 3.x entries, from 3.2.1.154 up to 3.9.12.55; no 4.x entry. This is a configuration inventory, not a tested continuous range.",
+        "runtime_tested": false,
+        "evidence_url": "https://github.com/xaoyaoo/PyWxDump/blob/d62e846ff6e90a57999afdc0cc003b599624e8cb/pywxdump/WX_OFFS.json"
+      },
+      "note": "Maintainer reports withdrawing code after a lawyer letter. Historical availability does not establish current support.",
+      "downloads": []
+    },
+    {
+      "id": "wechat-data-backup",
+      "name": "wechatDataBackup",
+      "role": "catalog-only-legacy",
+      "version": "1.2.4",
+      "version_kind": "preserved-tag",
+      "repository": "https://github.com/git-jiadong/wechatDataBackup",
+      "commit": "260c7306adf67963d346f399a483775db47a9107",
+      "recovery_mirrors": [
+        {
+          "repository": "https://gitee.com/git-jiadong/wechatDataBackup",
+          "commit": "260c7306adf67963d346f399a483775db47a9107",
+          "relationship": "Public main and v1.2.4 refs matched this commit; account identity is not independently established."
+        }
+      ],
+      "source_archive": null,
+      "declared_source_license": "Apache-2.0",
+      "compatibility": {
+        "platforms": [
+          "Windows"
+        ],
+        "wechat_versions": "Historical 3.x route; 4.0 was still being adapted after this 2025-04-15 snapshot.",
+        "runtime_tested": false,
+        "evidence_url": "https://github.com/git-jiadong/wechatDataBackup/issues/58#issuecomment-2817723636"
+      },
+      "note": "Listed in a published GitHub DMCA notice; the notice is not a court judgment. No new archive or binary distribution in this project.",
+      "downloads": []
+    },
+    {
+      "id": "weflow",
+      "name": "WeFlow",
+      "role": "catalog-only-research",
+      "version": "5.1.0",
+      "version_kind": "backup-release",
+      "repository": "https://github.com/mjkyleo/weflow",
+      "original_repository": "https://github.com/hicccc77/WeFlow",
+      "commit": "3c58317af0489f1e31c73d40b8958901d1f57187",
+      "source_archive": null,
+      "declared_source_license": "CC-BY-NC-SA-4.0",
+      "compatibility": {
+        "platforms": [
+          "Windows x64/arm64",
+          "macOS Apple Silicon arm64",
+          "Linux x64"
+        ],
+        "wechat_versions": "Backup README claims 4.0 or later; no full patch-level validation here.",
+        "runtime_tested": false,
+        "evidence_url": "https://github.com/mjkyleo/weflow/blob/3c58317af0489f1e31c73d40b8958901d1f57187/README.md"
+      },
+      "note": "Maintainer explicitly collected code from the network; one root backup commit does not preserve the original history. Broader features do not establish stronger provenance.",
+      "release_url": "https://github.com/mjkyleo/weflow/releases/tag/v5.1.0",
+      "downloads": []
+    },
+    {
+      "id": "wechat-exporter",
+      "name": "WechatExporter",
+      "role": "catalog-only-ios-backup",
+      "version": "1.9.5.13",
+      "version_kind": "upstream-release",
+      "repository": "https://github.com/BlueMatthew/WechatExporter",
+      "commit": "474318a3de729a3c91e9b4f283c3e31982468344",
+      "source_archive": null,
+      "declared_source_license": "Apache-2.0 at this snapshot; current main uses GPL-2.0. This is not a blanket license assessment of the release binaries.",
+      "compatibility": {
+        "platforms": [
+          "Windows x64",
+          "macOS x64"
+        ],
+        "input": "User-owned unencrypted iPhone/iPad local backup, not desktop WeChat databases.",
+        "wechat_versions": "Historical upstream tests include iOS 15.4 and mobile WeChat 8.0.18. This does not establish current iOS or desktop 4.x support.",
+        "runtime_tested": false,
+        "evidence_url": "https://github.com/BlueMatthew/WechatExporter/blob/474318a3de729a3c91e9b4f283c3e31982468344/README.md"
+      },
+      "preferred_export": "HTML with media and its local msgid locator, retaining the original backup; msgid is not a server MsgSvrID.",
+      "release_url": "https://github.com/BlueMatthew/WechatExporter/releases/tag/v1.9.5.13",
+      "downloads": []
+    }
+  ]
+}

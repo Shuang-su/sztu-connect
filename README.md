@@ -63,7 +63,7 @@
 
 你提供事件与来源，Agent 协助整理记录，关联人物、组织、地点、制度与主题；
 
-通过附带的工具导出的聊天记录也可由 Agent 按规则整理，校验并重建为 HTML。
+通过 [第三方工具目录](importers/README.md) 中的工具导出聊天记录后，可由 Agent 引用原始导出，或按需整理、校验并重建为 HTML。目录保留 CipherTalk 与 WeChatMsg 的固定源码存档；CipherTalk 安装包使用上游 Release 直链。
 
 你核对内容，本地工具负责校验并生成时间线与双向链接。
 
@@ -138,7 +138,7 @@ python -m unittest discover -s tests
 
 ### 聊天记录与 Computer History
 
-**聊天记录**：先通过工具取得导出文件，再请 Agent 按 [聊天导出说明](docs/CHAT_IMPORT.md) 映射到统一 JSONL，保留消息 ID、原时间、回复关系与上下文。仓库内的 `validate-chat` 可校验该 JSONL，`render-chat` 可生成本地 HTML 供回看；聊天中的陈述仍需作为来源内容核查。
+**聊天记录**：已有导出可以直接作为 Source 引用，不强制转换格式；还没有导出时先查看 [工具、支持版本与下载入口](importers/README.md)。需要结构化整理或本地回看时，再请 Agent 按 [聊天导出说明](docs/CHAT_IMPORT.md) 映射到统一 JSONL，保留消息定位、原时间、回复关系与上下文。仓库内的 `validate-chat` 校验 JSONL，`render-chat` 生成本地 HTML；工具来源可追溯不等于聊天未被编辑，聊天中的陈述仍需核查。选型依据见 [工具研究报告](docs/research/2026-09-03-chat-export-tools.md)。
 
 **Computer History（可选）**：如果你已在 Codex 中启用 Computer History，可以明确授权 Agent 查找与本次记录相关的电脑活动片段，用于找回曾浏览的网页、文档或消息线索。使用时先确认记录状态与时间范围，再回到原始材料核验；电脑操作或访问时间可以作为校园事件发生时间的核验来源，但应区分事件发生时间、材料发布时间和访问／观察时间。
 
@@ -182,6 +182,7 @@ Event、Source、Node、Collection 的 JSON/Markdown 是唯一真源；所有目
 ```text
 .codex-plugin/       Codex plugin manifest
 skills/              Plugin 可发现的 Agent 工作流
+importers/           第三方工具源码存档、许可、校验与上游下载入口
 content/events/      事件真源
 content/nodes/       人物、组织、地点、制度与主题节点
 content/collections/ 多种史体与专题组织
@@ -239,7 +240,7 @@ examples/minimal/    不进入正式索引的结构示例
 
 ## 致谢
 
-SZTU Connect 在校园知识共享、个人记录保存、社区协作和网页归档方面受到以下开源项目的启发。这里的列举不表示本项目使用、捆绑或依赖其代码；各项目仍适用各自的许可证和使用边界。
+SZTU Connect 在校园知识共享、个人记录保存、社区协作和网页归档方面受到以下项目的启发。实际保存的第三方源码及其许可单独列于 [工具目录](importers/README.md)；除此之外，下面的列举不表示本项目捆绑或依赖其代码，各项目仍适用各自的许可证和使用边界。
 
 - 本校信息整理：[SZTU-Information](https://github.com/Luv-Ray/SZTU-Information)。
 - 校园知识共享与社区协作：[zju-icicles](https://github.com/QSCTech/zju-icicles)、[SUSTechapplication](https://github.com/SUSTech-Application/SUSTechapplication)、[SJTU-Application](https://github.com/SurviveSJTU/SJTU-Application) 和 [SurviveSJTUManual](https://github.com/SurviveSJTU/SurviveSJTUManual)。
@@ -248,7 +249,7 @@ SZTU Connect 在校园知识共享、个人记录保存、社区协作和网页�
 
 ## 许可
 
-代码、原创叙事、结构化元数据和第三方来源采用分层许可，见 [LICENSE.md](LICENSE.md)。第三方材料的权利状态始终由各自来源记录说明。
+代码、原创叙事、结构化元数据和第三方来源采用分层许可，见 [LICENSE.md](LICENSE.md)。第三方史料的权利状态由各自来源记录说明；工具源码存档保留上游许可，不套用本项目代码许可。
 
 ---
 
