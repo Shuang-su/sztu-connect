@@ -19,6 +19,20 @@ NODE_FILE_BY_KIND = {
 }
 
 
+def _generated_output(root: Path) -> Path | None:
+    """Reject symlinks in every generated output directory before any write."""
+    output = root / "data" / "generated"
+    for directory in (
+        root / "data",
+        output,
+        output / "directories",
+        output / "knowledge",
+    ):
+        if directory.is_symlink():
+            return None
+    return output
+
+
 def _event_sort_key(event: dict[str, Any]) -> tuple[int, str, int, str]:
     time_value = event["time"]
     anchor = time_value.get("start") or time_value.get("end")
@@ -204,7 +218,12 @@ def build_indexes(root: Path, *, privacy_result: dict[str, Any] | None = None) -
 
     records = collect_repository(root)
     edges, backlinks = build_relationships(root, records)
-    output = root / "data" / "generated"
+    output = _generated_output(root)
+    if output is None:
+        return {
+            "ok": False,
+            "errors": ["data/generated and its output directories must not be symbolic links"],
+        }
 
     events = [event for _, event in records["event"]]
     events.sort(key=_event_sort_key)

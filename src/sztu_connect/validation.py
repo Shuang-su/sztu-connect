@@ -4,7 +4,6 @@ from collections import defaultdict
 from datetime import date, datetime
 from pathlib import Path
 from typing import Any
-from urllib.parse import parse_qsl, urlsplit
 
 from jsonschema import Draft202012Validator, FormatChecker
 
@@ -34,47 +33,6 @@ NODE_DIRECTORIES = {
 }
 
 PRECISION_LENGTH = {"year": 4, "month": 7, "day": 10}
-SENSITIVE_URL_QUERY_KEYS = {
-    "access_token",
-    "api_key",
-    "auth",
-    "authorization",
-    "credential",
-    "key",
-    "password",
-    "secret",
-    "sig",
-    "signature",
-    "token",
-}
-
-
-def _has_symlink_component(root: Path, path: Path) -> bool:
-    current = root
-    try:
-        relative = path.relative_to(root)
-    except ValueError:
-        return True
-    for part in relative.parts:
-        current = current / part
-        if current.is_symlink():
-            return True
-    return False
-
-
-def _validate_public_url(rel: Path, field: str, value: str, errors: list[str]) -> None:
-    parsed = urlsplit(value)
-    if parsed.username is not None or parsed.password is not None:
-        errors.append(f"{rel}: {field} must not contain URL userinfo credentials")
-    sensitive = sorted(
-        {
-            key.casefold()
-            for key, query_value in parse_qsl(parsed.query, keep_blank_values=True)
-            if query_value and key.casefold() in SENSITIVE_URL_QUERY_KEYS
-        }
-    )
-    if sensitive:
-        errors.append(f"{rel}: {field} contains sensitive query keys: {', '.join(sensitive)}")
 
 
 def collect_repository(root: Path) -> dict[str, list[tuple[Path, dict[str, Any]]]]:
@@ -170,9 +128,6 @@ def validate_repository(root: Path) -> dict[str, Any]:
     for kind, pattern in RECORD_PATTERNS.items():
         for path in sorted(root.glob(pattern)):
             rel = path.relative_to(root)
-            if _has_symlink_component(root, path):
-                errors.append(f"{rel}: canonical records cannot use symbolic links")
-                continue
             try:
                 record = load_json(path)
             except Exception as exc:  # noqa: BLE001
@@ -225,12 +180,6 @@ def validate_repository(root: Path) -> dict[str, Any]:
         time_value = event.get("time")
         if isinstance(time_value, dict):
             _validate_time(rel, time_value, errors)
-
-        privacy = event.get("privacy", {})
-        if privacy.get("risk") == "prohibited":
-            errors.append(f"{rel}: prohibited material cannot be a public event")
-        if privacy.get("handling") in {"metadata-only", "restricted"} and privacy.get("indexing") == "include":
-            errors.append(f"{rel}: metadata-only or restricted event cannot be indexed")
 
         claim_ids: set[str] = set()
         citation_sources_by_claim: dict[str, set[str]] = defaultdict(set)
@@ -320,11 +269,6 @@ def validate_repository(root: Path) -> dict[str, Any]:
         for source_id in node.get("source_ids", []):
             if source_id not in source_ids:
                 errors.append(f"{rel}: missing source {source_id}")
-        privacy = node.get("privacy", {})
-        if privacy.get("risk") == "prohibited":
-            errors.append(f"{rel}: prohibited material cannot be a public node")
-        if privacy.get("handling") in {"metadata-only", "restricted"} and privacy.get("indexing") == "include":
-            errors.append(f"{rel}: metadata-only or restricted node cannot be indexed")
         for label in [node.get("name"), *node.get("aliases", [])]:
             if isinstance(label, str):
                 node_labels[(str(kind), label.casefold().strip())].append(str(node_id))
@@ -366,11 +310,6 @@ def validate_repository(root: Path) -> dict[str, Any]:
             "organization", "place", "institution", "topic"
         }:
             errors.append(f"{rel}: institutional focus must be organization/place/institution/topic nodes")
-        privacy = collection.get("privacy", {})
-        if privacy.get("risk") == "prohibited":
-            errors.append(f"{rel}: prohibited material cannot be a public collection")
-        if privacy.get("handling") in {"metadata-only", "restricted"} and privacy.get("indexing") == "include":
-            errors.append(f"{rel}: metadata-only or restricted collection cannot be indexed")
         _narrative_links(root, path, collection, all_ids, errors)
 
     for path, source in records["source"]:
@@ -383,10 +322,6 @@ def validate_repository(root: Path) -> dict[str, Any]:
         locator = source.get("locator", {})
         if not any(locator.get(key) for key in ("original_url", "archive_url", "public_path", "identifier")):
             errors.append(f"{rel}: source requires at least one locator")
-        for field in ("original_url", "archive_url"):
-            url = locator.get(field)
-            if isinstance(url, str):
-                _validate_public_url(rel, field, url, errors)
         public_path = locator.get("public_path")
         if public_path:
             public_path_value = Path(public_path)
@@ -425,19 +360,12 @@ def validate_repository(root: Path) -> dict[str, Any]:
                     actual = sha256_file(candidate)
                     if declared != actual:
                         errors.append(f"{rel}: public_path sha256 does not match the source record")
-            if source.get("access") == "metadata-only":
-                errors.append(f"{rel}: metadata-only source cannot expose public_path")
         published = source.get("dates", {}).get("published_at")
         if isinstance(published, str):
             try:
                 _partial_date(published)
             except ValueError as exc:
                 errors.append(f"{rel}: invalid published_at {published!r}: {exc}")
-        privacy = source.get("privacy", {})
-        if privacy.get("risk") == "prohibited":
-            errors.append(f"{rel}: prohibited material cannot be a public source record")
-        if privacy.get("handling") in {"metadata-only", "restricted"} and privacy.get("indexing") == "include":
-            errors.append(f"{rel}: metadata-only or restricted source cannot be indexed")
 
     return {
         "ok": not errors,

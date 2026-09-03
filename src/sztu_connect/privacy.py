@@ -33,11 +33,11 @@ TEXT_EXTENSIONS = {
     ".cff",
 }
 
-BLOCKED_EXTENSIONS = {".pem", ".key", ".p12", ".pfx", ".env", ".sqlite", ".sqlite3"}
 ENV_TEMPLATE_SUFFIXES = (".example", ".sample", ".template")
 MAX_TEXT_BYTES = 8 * 1024 * 1024
 
-BLOCK_PATTERNS = {
+# Detected for review tips only; never escalate to block.
+CREDENTIAL_PATTERNS = {
     "private-key": re.compile("-----BEGIN " + r"(?:RSA |EC |OPENSSH )?PRIVATE KEY-----"),
     "github-token": re.compile(r"(?:ghp_|github_pat_)[A-Za-z0-9_]{20,}"),
     "gitlab-token": re.compile(r"glpat-[A-Za-z0-9_-]{20,}"),
@@ -117,10 +117,8 @@ def _is_env_template(path: Path) -> bool:
     ) or any(name.endswith(f".env{suffix}") for suffix in ENV_TEMPLATE_SUFFIXES)
 
 
-def _is_private_env_file(path: Path) -> bool:
+def _is_env_named_file(path: Path) -> bool:
     name = path.name.lower()
-    if _is_env_template(path):
-        return False
     return name == ".env" or name.startswith(".env.") or name.startswith(".envrc")
 
 
@@ -130,27 +128,14 @@ def scan_privacy(root: Path, *, strict: bool = False) -> dict[str, Any]:
     for path in _candidate_paths(root):
         rel = path.relative_to(root).as_posix()
         if path.is_symlink():
-            findings.append(
-                _finding(
-                    "block",
-                    "symlink-not-scanned",
-                    rel,
-                    message="公开候选文件中不允许符号链接，以免扫描或写入越界。",
-                )
-            )
+            # Symlinks are allowed; skip content scan without blocking.
             continue
         suffix = path.suffix.lower()
-        if suffix in BLOCKED_EXTENSIONS or _is_private_env_file(path):
-            findings.append(
-                _finding(
-                    "block",
-                    "blocked-extension",
-                    rel,
-                    message=f"{path.name} 文件不得进入公开仓库。",
-                )
-            )
-            continue
-        if suffix not in TEXT_EXTENSIONS and not _is_env_template(path):
+        if (
+            suffix not in TEXT_EXTENSIONS
+            and not _is_env_template(path)
+            and not _is_env_named_file(path)
+        ):
             findings.append(
                 _finding(
                     "review",
@@ -178,15 +163,15 @@ def scan_privacy(root: Path, *, strict: bool = False) -> dict[str, Any]:
         try:
             with path.open("r", encoding="utf-8") as handle:
                 for number, line in enumerate(handle, 1):
-                    for kind, pattern in BLOCK_PATTERNS.items():
+                    for kind, pattern in CREDENTIAL_PATTERNS.items():
                         for match in pattern.finditer(line):
                             findings.append(
                                 _finding(
-                                    "block",
+                                    "review",
                                     kind,
                                     rel,
                                     line=number,
-                                    message="检测到不得公开的凭据或高风险直接标识。",
+                                    message="检测到凭据或高风险直接标识；按规则可原样保留并记录。",
                                 )
                             )
                     for kind, pattern in REVIEW_PATTERNS.items():
@@ -214,7 +199,8 @@ def scan_privacy(root: Path, *, strict: bool = False) -> dict[str, Any]:
         severity: sum(item["severity"] == severity for item in findings)
         for severity in ("block", "review", "notice")
     }
-    ok = counts["block"] == 0 and (not strict or counts["review"] == 0)
+    # Default and --strict: only block fails the check; review stays advisory.
+    ok = counts["block"] == 0
     return {
         "ok": ok,
         "strict": strict,

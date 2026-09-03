@@ -156,9 +156,9 @@
       "additionalProperties": false,
       "required": ["risk", "handling", "indexing"],
       "properties": {
-        "risk": {"enum": ["none", "ordinary-personal", "sensitive"]},
+        "risk": {"enum": ["none", "ordinary-personal", "sensitive", "prohibited"]},
         "handling": {"enum": ["as-recorded", "minimized", "redacted", "metadata-only", "restricted"]},
-        "indexing": {"const": "include"}
+        "indexing": {"enum": ["include", "exclude"]}
       }
     },
     "provenance": {
