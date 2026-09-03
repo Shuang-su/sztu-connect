@@ -19,6 +19,18 @@ NODE_FILE_BY_KIND = {
 }
 
 
+def _generated_output(root: Path) -> Path | None:
+    """Return data/generated when it is a real in-repo directory, else None."""
+    data = root / "data"
+    if data.exists() and data.is_symlink():
+        return None
+    output = data / "generated"
+    if output.is_symlink():
+        return None
+    return output
+
+
+
 def _event_sort_key(event: dict[str, Any]) -> tuple[int, str, int, str]:
     time_value = event["time"]
     anchor = time_value.get("start") or time_value.get("end")
@@ -204,7 +216,12 @@ def build_indexes(root: Path, *, privacy_result: dict[str, Any] | None = None) -
 
     records = collect_repository(root)
     edges, backlinks = build_relationships(root, records)
-    output = root / "data" / "generated"
+    output = _generated_output(root)
+    if output is None:
+        return {
+            "ok": False,
+            "errors": ["data/generated must be a real directory inside the repository"],
+        }
 
     events = [event for _, event in records["event"]]
     events.sort(key=_event_sort_key)

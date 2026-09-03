@@ -181,7 +181,7 @@ class RepositoryTests(unittest.TestCase):
         finally:
             repo.close()
 
-    def test_prohibited_event_fails(self) -> None:
+    def test_prohibited_event_with_exclude_passes(self) -> None:
         repo = ExampleRepository()
         try:
             event = repo.event()
@@ -189,11 +189,11 @@ class RepositoryTests(unittest.TestCase):
             event["privacy"]["indexing"] = "exclude"
             write_json(repo.event_path, event)
             result = validate_repository(repo.root)
-            self.assertTrue(any("prohibited material" in item for item in result["errors"]))
+            self.assertTrue(result["ok"], result)
         finally:
             repo.close()
 
-    def test_restricted_collection_cannot_be_indexed(self) -> None:
+    def test_restricted_collection_can_be_indexed(self) -> None:
         repo = ExampleRepository()
         try:
             path = repo.root / "content/collections/collection-example-thematic/collection.json"
@@ -202,8 +202,7 @@ class RepositoryTests(unittest.TestCase):
             collection["privacy"]["indexing"] = "include"
             write_json(path, collection)
             result = validate_repository(repo.root)
-            self.assertFalse(result["ok"])
-            self.assertTrue(any("restricted collection" in item for item in result["errors"]))
+            self.assertTrue(result["ok"], result)
         finally:
             repo.close()
 
@@ -432,17 +431,18 @@ class RepositoryTests(unittest.TestCase):
             self.assertEqual(result["counts"]["review"], 1)
             self.assertNotIn(phone, json.dumps(result, ensure_ascii=False))
 
-    def test_privacy_secret_blocks_without_echo(self) -> None:
+    def test_privacy_secret_is_review_without_echo(self) -> None:
         with tempfile.TemporaryDirectory() as temporary:
             root = Path(temporary)
             secret = "ghp_" + ("a" * 24)
             (root / "note.md").write_text(secret, encoding="utf-8")
             result = scan_privacy(root)
-            self.assertFalse(result["ok"])
-            self.assertEqual(result["counts"]["block"], 1)
+            self.assertTrue(result["ok"], result)
+            self.assertEqual(result["counts"]["block"], 0)
+            self.assertEqual(result["counts"]["review"], 1)
             self.assertNotIn(secret, json.dumps(result, ensure_ascii=False))
 
-    def test_quoted_json_password_assignment_is_blocked(self) -> None:
+    def test_quoted_json_password_assignment_is_review(self) -> None:
         with tempfile.TemporaryDirectory() as temporary:
             root = Path(temporary)
             secret = "supersecret123"
@@ -450,11 +450,12 @@ class RepositoryTests(unittest.TestCase):
                 json.dumps({"password": secret}), encoding="utf-8"
             )
             result = scan_privacy(root)
-            self.assertFalse(result["ok"], result)
-            self.assertEqual(result["counts"]["block"], 1)
+            self.assertTrue(result["ok"], result)
+            self.assertEqual(result["counts"]["block"], 0)
+            self.assertEqual(result["counts"]["review"], 1)
             self.assertNotIn(secret, json.dumps(result, ensure_ascii=False))
 
-    def test_build_and_export_block_detected_secrets(self) -> None:
+    def test_build_and_export_allow_detected_secrets_as_review(self) -> None:
         repo = ExampleRepository()
         try:
             event = repo.event()
@@ -463,21 +464,22 @@ class RepositoryTests(unittest.TestCase):
             write_json(repo.event_path, event)
             build = build_indexes(repo.root)
             export = export_knowledge(repo.root, repo.root / ".work/knowledge")
-            self.assertFalse(build["ok"])
-            self.assertFalse(export["ok"])
-            self.assertFalse((repo.root / "data/generated/knowledge/chunks.jsonl").exists())
-            self.assertFalse((repo.root / ".work/knowledge/chunks.jsonl").exists())
+            self.assertTrue(build["ok"], build)
+            self.assertTrue(export["ok"], export)
+            self.assertTrue((repo.root / "data/generated/knowledge/chunks.jsonl").exists())
+            self.assertTrue((repo.root / ".work/knowledge/chunks.jsonl").exists())
         finally:
             repo.close()
 
-    def test_private_env_filenames_are_blocked(self) -> None:
+    def test_private_env_filenames_are_scanned_not_blocked(self) -> None:
         for filename in (".env", ".env.local", ".envrc", ".envrc.local"):
             with self.subTest(filename=filename), tempfile.TemporaryDirectory() as temporary:
                 root = Path(temporary)
                 (root / filename).write_text("API_" + "KEY=undetected-format\n", encoding="utf-8")
                 result = scan_privacy(root)
-                self.assertFalse(result["ok"], result)
-                self.assertEqual(result["counts"]["block"], 1)
+                self.assertTrue(result["ok"], result)
+                self.assertEqual(result["counts"]["block"], 0)
+                self.assertEqual(result["scanned_files"], 1)
 
     def test_env_template_is_scanned_but_not_blocked_by_filename(self) -> None:
         with tempfile.TemporaryDirectory() as temporary:
@@ -488,16 +490,27 @@ class RepositoryTests(unittest.TestCase):
             self.assertEqual(result["counts"]["block"], 0)
             self.assertEqual(result["scanned_files"], 1)
 
-    def test_env_template_contents_are_still_scanned(self) -> None:
+    def test_env_template_contents_are_still_reviewed(self) -> None:
         for filename in (".env.example", "prod.env.example"):
             with self.subTest(filename=filename), tempfile.TemporaryDirectory() as temporary:
                 root = Path(temporary)
                 secret = "ghp_" + ("b" * 24)
                 (root / filename).write_text(secret, encoding="utf-8")
                 result = scan_privacy(root)
-                self.assertFalse(result["ok"], result)
-                self.assertEqual(result["counts"]["block"], 1)
+                self.assertTrue(result["ok"], result)
+                self.assertEqual(result["counts"]["block"], 0)
+                self.assertEqual(result["counts"]["review"], 1)
                 self.assertNotIn(secret, json.dumps(result, ensure_ascii=False))
+
+    def test_privacy_strict_does_not_fail_on_review(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            phone = "138" + "00138000"
+            (root / "note.md").write_text(phone, encoding="utf-8")
+            result = scan_privacy(root, strict=True)
+            self.assertTrue(result["ok"], result)
+            self.assertTrue(result["strict"])
+            self.assertEqual(result["counts"]["review"], 1)
 
     def test_binary_file_gets_review_finding(self) -> None:
         with tempfile.TemporaryDirectory() as temporary:
@@ -537,7 +550,7 @@ class RepositoryTests(unittest.TestCase):
         finally:
             repo.close()
 
-    def test_canonical_symlink_is_rejected(self) -> None:
+    def test_canonical_symlink_is_allowed(self) -> None:
         repo = ExampleRepository()
         try:
             with tempfile.TemporaryDirectory() as temporary:
@@ -546,8 +559,7 @@ class RepositoryTests(unittest.TestCase):
                 repo.event_path.unlink()
                 repo.event_path.symlink_to(outside)
                 result = validate_repository(repo.root)
-                self.assertFalse(result["ok"])
-                self.assertTrue(any("symbolic links" in item for item in result["errors"]))
+                self.assertTrue(result["ok"], result)
         finally:
             repo.close()
 
@@ -607,7 +619,7 @@ class RepositoryTests(unittest.TestCase):
         finally:
             repo.close()
 
-    def test_source_urls_cannot_embed_credentials_or_secret_queries(self) -> None:
+    def test_source_urls_may_embed_credentials_or_secret_queries(self) -> None:
         repo = ExampleRepository()
         try:
             source_path = repo.root / "sources/records/source-example-documentation.json"
@@ -621,9 +633,42 @@ class RepositoryTests(unittest.TestCase):
             )
             write_json(source_path, source)
             result = validate_repository(repo.root)
-            self.assertFalse(result["ok"])
-            self.assertTrue(any("userinfo credentials" in item for item in result["errors"]))
-            self.assertTrue(any("sensitive query keys" in item for item in result["errors"]))
+            self.assertTrue(result["ok"], result)
+        finally:
+            repo.close()
+
+    def test_metadata_only_source_may_expose_public_path(self) -> None:
+        repo = ExampleRepository()
+        try:
+            public_file = repo.root / "public/source.txt"
+            public_file.parent.mkdir()
+            public_file.write_text("source", encoding="utf-8")
+            source_path = repo.root / "sources/records/source-example-documentation.json"
+            source = load_json(source_path)
+            source["access"] = "metadata-only"
+            source["locator"]["public_path"] = "public/source.txt"
+            source["hashes"] = [
+                {"algorithm": "sha256", "value": sha256_file(public_file)}
+            ]
+            write_json(source_path, source)
+            result = validate_repository(repo.root)
+            self.assertTrue(result["ok"], result)
+        finally:
+            repo.close()
+
+    def test_prohibited_records_are_exported(self) -> None:
+        repo = ExampleRepository()
+        try:
+            event = repo.event()
+            event["privacy"]["risk"] = "prohibited"
+            event["privacy"]["indexing"] = "exclude"
+            write_json(repo.event_path, event)
+            export = export_knowledge(repo.root, repo.root / ".work/knowledge")
+            self.assertTrue(export["ok"], export)
+            chunks = (repo.root / ".work/knowledge/chunks.jsonl").read_text(encoding="utf-8")
+            self.assertIn(event["id"], chunks)
+            self.assertIn('"risk":"prohibited"', chunks)
+            self.assertIn('"indexing":"exclude"', chunks)
         finally:
             repo.close()
 

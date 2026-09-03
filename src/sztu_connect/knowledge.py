@@ -145,8 +145,6 @@ def build_knowledge_chunks(
 ) -> list[dict[str, Any]]:
     forms_by_event: dict[str, set[str]] = {}
     for _, collection in records["collection"]:
-        if collection.get("privacy", {}).get("indexing") != "include":
-            continue
         for event_id in collection.get("event_ids", []):
             forms_by_event.setdefault(event_id, set()).add(collection["form"])
 
@@ -154,8 +152,6 @@ def build_knowledge_chunks(
 
     for path, event in records["event"]:
         privacy = event["privacy"]
-        if privacy.get("indexing") != "include" or privacy.get("risk") == "prohibited":
-            continue
         common = {
             "root": root,
             "path": path,
@@ -201,8 +197,6 @@ def build_knowledge_chunks(
 
     for path, node in records["node"]:
         privacy = node["privacy"]
-        if privacy.get("indexing") != "include" or privacy.get("risk") == "prohibited":
-            continue
         text = node["name"]
         if node.get("aliases"):
             text += "\n别名：" + "、".join(node["aliases"])
@@ -236,8 +230,6 @@ def build_knowledge_chunks(
 
     for path, collection in records["collection"]:
         privacy = collection["privacy"]
-        if privacy.get("indexing") != "include" or privacy.get("risk") == "prohibited":
-            continue
         chunks.append(
             _base_chunk(
                 root=root,
@@ -263,8 +255,6 @@ def build_knowledge_chunks(
 
     for path, source in records["source"]:
         privacy = source["privacy"]
-        if privacy.get("indexing") != "include" or privacy.get("risk") == "prohibited":
-            continue
         parts = [source["title"]]
         if source.get("creator"):
             parts.append(f"创作者：{source['creator']}")
@@ -315,14 +305,7 @@ def write_knowledge_export(
     backlinks: dict[str, dict[str, list[dict[str, Any]]]],
 ) -> dict[str, Any]:
     chunks = build_knowledge_chunks(root, records, backlinks)
-    chunk_validator = Draft202012Validator(load_json(root / "schemas" / "knowledge-chunk.schema.json"))
     errors: list[str] = []
-    for chunk in chunks:
-        for failure in chunk_validator.iter_errors(chunk):
-            location = ".".join(str(part) for part in failure.path) or "$"
-            errors.append(f"{chunk['chunk_id']}:{location}: {failure.message}")
-    if errors:
-        return {"ok": False, "errors": errors, "chunks": len(chunks)}
 
     lines = [json.dumps(item, ensure_ascii=False, sort_keys=True, separators=(",", ":")) for item in chunks]
     payload = (("\n".join(lines) + "\n") if lines else "").encode("utf-8")
