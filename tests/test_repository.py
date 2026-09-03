@@ -576,6 +576,60 @@ class RepositoryTests(unittest.TestCase):
         finally:
             repo.close()
 
+    def test_generated_subdirectory_symlinks_are_blocked_before_any_write(self) -> None:
+        for directory, filename in (
+            ("knowledge", "chunks.jsonl"),
+            ("directories", "people.json"),
+        ):
+            with self.subTest(directory=directory):
+                repo = ExampleRepository()
+                try:
+                    with tempfile.TemporaryDirectory() as temporary:
+                        outside = Path(temporary)
+                        existing = outside / filename
+                        existing.write_bytes(b"preserve existing output\n")
+                        generated = repo.root / "data/generated"
+                        generated.mkdir(parents=True)
+                        link = generated / directory
+                        link.symlink_to(outside, target_is_directory=True)
+
+                        result = build_indexes(repo.root)
+
+                        self.assertFalse(result["ok"], result)
+                        self.assertTrue(result["errors"])
+                        self.assertEqual(list(generated.iterdir()), [link])
+                        self.assertTrue(link.is_symlink())
+                        self.assertEqual(list(outside.iterdir()), [existing])
+                        self.assertEqual(existing.read_bytes(), b"preserve existing output\n")
+                finally:
+                    repo.close()
+
+    def test_generated_output_dangling_symlinks_are_blocked_before_any_write(self) -> None:
+        for directory in (
+            "data",
+            "data/generated",
+            "data/generated/knowledge",
+            "data/generated/directories",
+        ):
+            with self.subTest(directory=directory):
+                repo = ExampleRepository()
+                try:
+                    with tempfile.TemporaryDirectory() as temporary:
+                        outside = Path(temporary)
+                        link = repo.root / directory
+                        link.parent.mkdir(parents=True, exist_ok=True)
+                        link.symlink_to(outside / "missing", target_is_directory=True)
+
+                        result = build_indexes(repo.root)
+
+                        self.assertFalse(result["ok"], result)
+                        self.assertTrue(result["errors"])
+                        self.assertTrue(link.is_symlink())
+                        self.assertEqual(list(outside.iterdir()), [])
+                        self.assertFalse((repo.root / "data/generated/timeline.json").exists())
+                finally:
+                    repo.close()
+
     def test_work_root_symlink_is_rejected(self) -> None:
         with tempfile.TemporaryDirectory() as temporary, tempfile.TemporaryDirectory() as outside:
             root = Path(temporary)
