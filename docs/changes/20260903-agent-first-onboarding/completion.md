@@ -23,9 +23,25 @@ README 正文通过 GitHub Markdown API 的 GFM 渲染，在临时本地预览�
 
 独立 Skill 只读演练：读取 Skill、共用指南及项目规则，运行 `bootstrap --check --json` 与只读 `doctor`；没有安装、构建、登录或修改工作树。能正确区分运行时已可用、当前指纹示例未生成和工具清单缺失，未把只读请求升级为安装。该演练不是九种客户端的完整安装验收。
 
+## 正式工具依赖集成与复验
+
+先提交初始化助手与文档两个 checkpoint，再将工具归档任务正式交付的 `621de40f2fed1d2345b2e8bff1d7797962072150` 合入本轮实施分支。处理了 CI、README 项目树、聊天 Skill 和记录 Skill 四处重叠：保留双方检查、工具来源与聊天证据流程，仅衔接到共用初始化入口，没有改写对方已经交付的源码或许可。此操作是实施分支吸收依赖，不是将本轮功能合并或推送到 `main`。
+
+两份固定源码存档通过 `python importers/verify_archives.py` 的离线 SHA-256、Git tree / blob 和许可校验，没有执行上游源码。工具任务新增的 14 项测试与本轮测试合计 107 项通过；随后补充正式清单的平台选择 / 无下载和无回执输出保护两项回归，完整 **109 项测试通过**（含真实核心环境集成）。核对 macOS arm64 与 Windows x64 均选择清单中的 CipherTalk 固定版本，不把 WeChatMsg 源码备份或 catalog-only 条目标成已安装。
+
+指南同步反映正式交付：源码使用普通 Git，当前不需要 LFS；安装包从清单固定的上游地址按平台获取。LFS 指针保护保留为兼容检查，不为当前仓库引入 LFS。
+
+最终边界复核对照本地 pip 实现，隔离可能重定向安装解释器、根目录、源码、构建状态和详细日志的继承环境变量。真实集成夹具故意设置工作副本之外的临时目标，仍能完成初始化且该目标没有被创建；没有修改用户的全局环境或 pip 配置。已有示例输出但缺少验收回执时返回 `unverified_outputs / pending_user`，保留文件并要求核对恢复方式，不把它们猜成可覆盖的中断产物。
+
+在实际工作副本中单独生成更新指纹 `5000e42b5aa1c92f` 的隔离示例，再执行只读 bootstrap：`workspace`、`runtime`、`example` 为 `completed`，`local_ready: true`；工具为 `pending_user / missing_payload`，GitHub 为 `not_applicable / local_only`，`operations` 为空。没有因这次实现验证而下载或安装真实聊天应用。聊天 HTML 已在仅绑定回环地址的本地浏览器预览，标题、两条合成消息与回复标识正常，未见页面错误日志；示例关联及 `claim-example-purpose → source-example-documentation` 引用已核对。预览后关闭临时标签页与服务。
+
+相对已集成上游 `621de40` 的本轮变更通过 `git diff --check`。合并阶段检查曾报告 CipherTalk 上游许可原文的 4 行尾随空格；按原始字节归档要求保留，不通过改写第三方许可掩盖差异。
+
+最终复验：两份项目 JSON、变更证据 JSON、编译检查、`doctor`、`validate`、`privacy-scan`、`check` 与双次 `build` 通过，12 个派生文件逐个 SHA-256 相同。隐私扫描的 `block: 0 / review: 6` 与工具交付边界一致：两份未作文本扫描的源码压缩包、三份非标准扩展名许可文本及工具研究记录中的 CI run ID 样式提示；没有改动扫描器来消除提示。相对 `621de40` 的 `src/`、Schema、正式内容、派生数据、依赖锁及 `importers/` 均无差异。最终 README 再次通过 GitHub Markdown API 渲染，完整复制提示词、两个折叠区和两个表格均保留；没有将渲染 API 当作发布操作。
+
 ## 未完成与边界
 
-- 本分支没有正式 `importers/registry.json` 和工具文件，工具阶段为 `registry_pending`。已核对清单草稿结构并以合成夹具测试；未安装或启动真实聊天应用，未访问数据库、聊天账号或 Computer History。
+- 正式工具清单和源码归档已集成，但图形安装包在本机未下载 / 校验，真实应用未安装或启动；工具状态准确保持待完成。源码归档与哈希不是安全审计或真实应用体验证明；未访问数据库、聊天账号或 Computer History。
 - Windows / macOS 初始化 CI 已配置，但未推送，因此新增远端作业尚未运行；Windows 实机和九种客户端的完整端到端体验均保持待验证，见 [验收矩阵](../../ONBOARDING_TEST_MATRIX.md)。
 - 指南公开 URL 需要文档进入默认分支后再验证；本地文件存在不表示远端链接已发布。
 - 没有改动数据模型、导出格式、内容校验策略或正式内容；没有发布网站、RAG 服务、PR、Release 或其他远端产物。
@@ -34,6 +50,7 @@ README 正文通过 GitHub Markdown API 的 GFM 渲染，在临时本地预览�
 ## Checkpoint
 
 - `1a3e381226542b5a1a907b77a25e69cf15b1bf63` — `feat(onboarding): add resumable local bootstrap helper`，初始化助手、行为与边界测试、空骨架夹具修正、Windows / macOS CI。
-- 文档及薄适配入口随后单独提交；最终回复和后续完成记录会给出 SHA。
-
-实施期间，上游工具归档任务在独立工作副本完成并进入 main（`621de40`）。将在当前实施分支合入这项已批准依赖，保留其来源记录和双方改动，再补充集成验证；不改动或推送 main。
+- `2544a4ef6bc02eae1ac4a5ddacfcfe419f7fc92b` — `docs(onboarding): add shared agent-first getting started flow`，共用指南、README、薄适配入口、研究 / 请求 / 计划和首轮完成记录。
+- `9628c8b81dc6a2d34859d3a93478ff2675a9ac50` — `merge: integrate verified chat tool archive dependency`，将已完成工具任务的正式交付合入本地实施分支，保留上游历史和双方行为。
+- `d9e7cd1ebc43d62ff286c0018d87d3b8851431bc` — `fix(onboarding): preserve local install and example boundaries`，补齐继承环境变量和无回执输出的保护，验证正式工具清单，109 项测试通过。
+- 交付说明校准、最终验收状态及本完成记录随最后文档 checkpoint 提交；该提交 SHA 在最终回复中报告，避免文档自引用自身尚未生成的 SHA。

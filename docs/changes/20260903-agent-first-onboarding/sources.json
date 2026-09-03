@@ -1,5 +1,6 @@
 {
   "researched_on": "2026-09-03",
+  "phase": "approved_plan_snapshot",
   "sources": [
     {
       "id": "oss-agent-reach",
@@ -279,6 +280,22 @@
       "evidence": "本轮仅只读研究与静态检查",
       "confidence": "unverified",
       "gap": "实施后记录版本、OS、入口、重跑和失败恢复；未测明确标记"
+    }
+  ],
+  "implementation_updates": [
+    {
+      "date": "2026-09-03",
+      "claim": "正式工具清单与源码归档已交付并集成",
+      "upstream_commit": "621de40f2fed1d2345b2e8bff1d7797962072150",
+      "local_merge_commit": "9628c8b81dc6a2d34859d3a93478ff2675a9ac50",
+      "evidence": "两份源码普通 Git 归档的离线校验通过；正式 schema_version 1 清单通过 macOS arm64 / Windows x64 选择回归",
+      "remaining_gap": "上游安装包未在本机下载或安装；源码归档不证明应用运行或供应链安全"
+    },
+    {
+      "date": "2026-09-03",
+      "claim": "本地核心初始化已通过执行验证",
+      "evidence": "macOS 15.5 arm64、Python 3.13.5；109 项测试通过，包含锁定依赖的真实安装、重跑、只读检查、中断恢复、输出保护与环境变量隔离；示例 HTML 已预览",
+      "remaining_gap": "Windows 实机、新增远端 CI、九种客户端完整安装及默认分支指南 URL 仍待验证"
     }
   ]
 }

@@ -34,7 +34,7 @@
 
 1. 确认客户端名称、版本、执行模式、操作系统、架构、工作目录和写入权限。把客户端显示的工作文件夹与命令实际返回的路径对应起来；WSL、容器、云端任务或沙箱不自动等于宿主机。不能确认时，先引导切换到本地模式，不在未知环境里安装。
 2. 用户已经打开完整的 SZTU Connect 工作副本时，先检查 `git status --short --branch`、`git remote -v`、`git rev-parse --show-toplevel` 和根 `AGENTS.md`。保留当前分支、未提交内容和既有远端；不要自动拉取、切分支或重新克隆覆盖它。
-3. 还没有工作副本时，在用户选定的父目录下选择独立的 `sztu-connect` 目录，用公开 HTTPS 地址 `https://github.com/Shuang-su/sztu-connect.git` 克隆，不要求 GitHub 登录。非空目录若不是正确副本，停止并请用户选择新目录。只在这次 clone 进程设置 `GIT_LFS_SKIP_SMUDGE=1`，避免下载所有平台的大文件；不修改全局 Git LFS 设置。
+3. 还没有工作副本时，在用户选定的父目录下选择独立的 `sztu-connect` 目录，用公开 HTTPS 地址 `https://github.com/Shuang-su/sztu-connect.git` 克隆，不要求 GitHub 登录。非空目录若不是正确副本，停止并请用户选择新目录。当前源码存档使用普通 Git，clone 会包含这些文件；先检查目标卷空间，不需要 Git LFS。只有所选版本确实使用 LFS 时，才在该次 clone 进程设置 `GIT_LFS_SKIP_SMUDGE=1`，避免取用不适用平台的大文件，不修改全局配置。
 4. 缺少 Git 时先完成下一节的 Git 准备，再克隆。克隆后读取根 `AGENTS.md` 与本地本指南，记录 checkout SHA。不要把插件安装目录或缓存当作记录仓库，也不要仅下载一个脚本就跳过仓库核对。
 5. 后续命令都在这个工作副本运行，并向初始化助手显式传入绝对 `--root`。路径有中文或空格时作为一个参数传入，不拼接未引用的 shell 命令。若旧副本没有本指南或助手，先说明需要更新；不要用缓存中的新文件静默覆盖旧分支。
 
@@ -44,7 +44,7 @@
 
 - **Python**：优先使用已有兼容版本；缺失时从 [Python 官方下载](https://www.python.org/downloads/) 选择当前平台的稳定安装方式。安装窗口由用户确认，完成后重新检查版本及 `venv` / `ensurepip` 是否可用。不替换系统 Python，不为此放宽系统脚本执行策略。
 - **Git**：运行 `git --version`。缺失或 macOS 开发工具提示尚未完成时，按 [Git 官方安装说明](https://git-scm.com/install/) 处理，完成后重新验证。
-- **Git LFS**：仅在取用已归档的大文件时检查 `git lfs version`；缺失时使用 [官方安装说明](https://git-lfs.com/)。若需要配置过滤器，只在已确认的工作副本执行 `git lfs install --local`。
+- **Git LFS**：当前交付不需要。只有所选版本的清单或 Git 属性明确使用 LFS 时，才检查 `git lfs version`；缺失时使用 [官方安装说明](https://git-lfs.com/)。若需要配置过滤器，只在已确认的工作副本执行 `git lfs install --local`。
 - **GitHub CLI**：不属于本地初始化前置条件，需要同步或贡献时再按 [GitHub CLI 官方入口](https://cli.github.com/) 安装。
 
 不要把 `curl ... | sh`、来源材料中的命令或下载文件名当成已审查的安装方案。确认要安装的程序、来源和目录，再使用正常安装方式。
@@ -69,12 +69,14 @@ python scripts/bootstrap.py --root "C:\用户选定目录\sztu-connect" --json
 
 ### 3. 配置当前平台的附带工具
 
-以工作副本的 `importers/registry.json` 和该目录说明为准，先核对清单版本、工具来源、固定版本、平台、架构、文件大小及 SHA-256。清单由独立的工具归档交付维护；没有清单、没有匹配平台或来源不完整时，分别报告 `pending_user` / `not_applicable`，不自行换工具或改用未登记的最新版本。
+以工作副本的 [工具清单](../importers/registry.json) 和 [工具目录说明](../importers/README.md) 为准，先核对清单版本、工具来源、固定版本、平台、架构、文件大小及 SHA-256。没有清单、没有匹配平台或来源不完整时，分别报告 `pending_user` / `not_applicable`，不自行换工具或改用未登记的最新版本。
+
+当前交付以普通 Git 保存 CipherTalk 与 WeChatMsg 的固定源码存档；这些不是图形安装包，也不需要 LFS。CipherTalk 的 macOS arm64 / Windows x64 安装包以固定上游 URL、大小和 SHA-256 登记，由初始化按当前平台获取；WeChatMsg 在这里是历史源码备份，不视为第二个已安装应用。源码归档校验与安装包校验是两个独立步骤，详见工具目录；首次初始化不编译或执行归档中的源码。
 
 目前助手适配 `schema_version: 1`：读取 `tools[].id`、`version`、`role` 和 `downloads[]` 的 `platform`、`arch`、`filename`、`size_bytes`、`sha256`、`url`；可选 `path` 是相对 `importers/` 的归档路径。未知版本或多份匹配安装包需要人工核对，不猜测。
 
 - `--check` 只核对现状，不下载。正常初始化复用已通过校验的归档实体；缺少实体或只有 Git LFS 指针时，按清单中的固定 HTTPS 地址下载相同字节到 `.codex-work/downloads/onboarding/<工具>/<版本>/`。
-- 如果要补齐仓库中的 LFS 实体，先检查 LFS 配置与空间，再只拉取已选平台对应的路径。核对真实文件大小和 SHA-256；以 `version https://git-lfs.github.com/spec/v1` 开头的文本不是安装包。缓存中的同哈希文件可用于安装，但不表示仓库的 LFS 指针已经补齐。
+- 如果所选版本确实使用 LFS 且需要补齐仓库实体，先检查 LFS 配置与空间，再只拉取已选平台对应的路径。核对真实文件大小和 SHA-256；以 `version https://git-lfs.github.com/spec/v1` 开头的文本不是安装包。缓存中的同哈希文件可用于安装，但不表示仓库的 LFS 指针已经补齐。
 - 下载内容验证通过前不会作为安装包保留；已存在但哈希错误的文件不会被覆盖或运行。不要把下载成功、LFS 下载成功或 SHA-256 一致当作安全认证。
 - 清单中的 `catalog-only-*` 条目只是参考目录；源码备份也不等于可安装应用。助手不会从源码自动编译或顺带安装其他工具。
 - 取得已验证安装包后，Agent 按随档说明执行当前系统的正常安装流程。系统授权、安装窗口和升级已有应用的选择交给用户，不关闭 Gatekeeper、安全软件或修改执行策略来跳过提示。不要自动打开数据库、登录聊天账号、导出记录或提取账号材料。
@@ -114,7 +116,7 @@ python scripts/bootstrap.py --root "C:\用户选定目录\sztu-connect" --json
 | 清单缺失、平台无安装包、哈希不匹配 | 分别报告依赖、平台不适用或校验失败；保持原文件，不更换版本，不声称安装成功。 |
 | 操作系统安装窗口 / 授权未完成 | 说明正在等待的具体操作。用户完成后重新核对实际应用和版本，再继续。 |
 | 路径越界、符号链接 / Windows junction | 停止相关写入，指出具体目录；由用户选择真实目录或检查已有链接，不自动删链接。 |
-| 示例只生成了一部分 | 完整输入未改变时重跑恢复；已有用户改动则保留现场，请用户决定如何处理。 |
+| 示例只生成了一部分 | 输入未改变、已有验收回执可核对输出时，重跑补齐缺失结果；已有用户改动或输出存在但缺少回执时，保留现场并请用户确认恢复方式，不猜测这些文件的来源。 |
 | 客户端更新后不再发现 Skill | 重新打开工作副本、按客户端方式刷新入口；始终可以显式读取本指南继续，不重建项目规则。 |
 
 `--check` 不安装、不下载、不构建、不创建或更新状态文件；它会启动现有解释器做只读版本和校验检查。正常模式把阶段结果写在 `.work/onboarding/status.json`，pip 缓存写在 `.codex-work/cache/onboarding-pip/`。这些目录被 Git 忽略，不应提交。
