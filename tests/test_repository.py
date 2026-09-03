@@ -49,10 +49,19 @@ class ExampleRepository:
 
 
 class RepositoryTests(unittest.TestCase):
-    def test_public_skeleton_validates(self) -> None:
+    def test_current_repository_validates(self) -> None:
         result = validate_repository(ROOT)
         self.assertTrue(result["ok"], result["errors"])
-        self.assertEqual(result["counts"]["event"], 0)
+
+    def test_empty_skeleton_fixture_validates(self) -> None:
+        # Emptiness describes this fixture, not every user's live repository.
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            shutil.copytree(ROOT / "schemas", root / "schemas")
+            shutil.copyfile(ROOT / "connect.config.json", root / "connect.config.json")
+            result = validate_repository(root)
+            self.assertTrue(result["ok"], result["errors"])
+            self.assertEqual(result["counts"], {"event": 0, "node": 0, "collection": 0, "source": 0})
 
     def test_minimal_example_validates(self) -> None:
         repo = ExampleRepository()

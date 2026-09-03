@@ -1,0 +1,3 @@
+# SZTU Connect
+
+@AGENTS.md
