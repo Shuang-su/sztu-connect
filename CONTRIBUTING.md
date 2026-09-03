@@ -2,6 +2,8 @@
 
 SZTU Connect 不设置固定治理角色。任何人都可以 clone、fork、补充来源、建立记录或提出更正；仓库历史、来源链和确定性检查共同构成审计轨迹。
 
+第一次使用可以把 [README 的一句话入口](README.md#快速开始) 发给本地 Agent，按 [上手指南](docs/GETTING_STARTED.md) 准备环境和查看示例。不会写代码也可以先整理来源与事件；需要同步或贡献时再连接 GitHub，本地使用不要求登录。
+
 ## 最小贡献
 
 一条可合并的记录只需要：
@@ -13,7 +15,7 @@ SZTU Connect 不设置固定治理角色。任何人都可以 clone、fork、补
 5. 对其他记录的关系（若有）；
 6. `sztu-connect check --json` 通过。
 
-可以从 `examples/minimal/` 复制结构，或让 Codex 使用 `record-campus-event` skill 起草。没有长篇 Markdown 叙事也可以先提交结构化记录。
+可以参考 `examples/minimal/` 的结构，或让 Agent 读取 `skills/record-campus-event/SKILL.md` 起草。示例本身不是真实校园史料。没有长篇 Markdown 叙事也可以先提交结构化记录。
 
 ## 更正而非静默改写
 

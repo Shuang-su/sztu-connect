@@ -71,7 +71,7 @@
 
 我们希望可以从校园事件记录逐步扩展到校园历史、档案、信息与知识，构建能够引用来源、辨别时效的校园 RAG（检索增强生成）知识库。
 
-[快速开始](#快速开始) · [数据模型](docs/DATA_MODEL.md) · [参与贡献](CONTRIBUTING.md) · [长期目标](#长期目标)
+[快速开始](#快速开始) · [Agent 上手指南](docs/GETTING_STARTED.md) · [数据模型](docs/DATA_MODEL.md) · [参与贡献](CONTRIBUTING.md) · [长期目标](#长期目标)
 
 <br>
 
@@ -92,7 +92,29 @@
 
 ## 快速开始
 
-> 准备事件摘要、详细描述、提供来源、相关资料、图片、视频、文件及已知时间 → 配置本地环境 → 请 Agent 整理草稿 → 核对事实与公开范围 → 运行检查并查看生成结果。
+### 交给 Agent 开始
+
+打开你熟悉、能够操作本地文件和命令的 Agent，选择一个用于保存项目的文件夹，把下面这句话发给它：
+
+```text
+请阅读 https://raw.githubusercontent.com/Shuang-su/sztu-connect/main/docs/GETTING_STARTED.md ，按指引在本机安装并初始化 SZTU Connect，配置适用的附带工具、跑通示例，完成后带我记录第一件校园往事。
+```
+
+- **开始前**：准备一种可正常工作的本地客户端即可，不必安装全部客户端，也不必先安装 SZTU Connect 专属插件。
+- **Agent 会完成**：获取项目、检查并准备环境、配置当前系统适用的附带工具、验证示例，告诉你记录和结果保存在哪里。
+- **你可能需要完成**：确认安装位置、处理系统授权或安装窗口；需要同步时，再登录 GitHub。你不需要自己编写安装命令，但这不意味着全程零确认。
+
+共用入口面向 Claude Code、WorkBuddy、Codex、DeepSeek Harness、Kimi Code、ZCode、Cursor、TraeWork 和 QoderWork。不同客户端的工作区、执行模式和原生 Skill 接入方式见 [上手指南](docs/GETTING_STARTED.md#选择客户端)；不能把云端或隔离环境中的安装当成本机已就绪。
+
+初始化助手面向 Windows 与 macOS，Linux 继续使用下方手动 CLI 路径。客户端文档适配与真实安装验收分开记录，尚未实测的组合会保留为“待验证”，见 [验收记录](docs/ONBOARDING_TEST_MATRIX.md)。
+
+### 查看初始化结果和示例
+
+Agent 会分别报告基础环境、附带工具、示例和 GitHub 状态，并给出本地聊天 HTML、时间线、反向链接和知识 JSONL 的路径。核心环境可用但某项工具需要安装授权或缺少归档文件时，会明确列出未完成项；没有 GitHub 登录不影响本地使用。
+
+示例写入忽略目录 `.work/onboarding/`，不进入正式记录。可以先查看 [最小结构示例](examples/minimal/)：其中的 [事件](examples/minimal/content/events/2024/event-example-structure/event.json) 引用 [来源](examples/minimal/sources/source-example-documentation.json)，关联 [五类目录节点](examples/minimal/content/nodes/)，并由 [四种史体集合](examples/minimal/content/collections/) 展示不同组织方式。它不代表真实校园史料，也不会自动进入正式索引；不要把示例当作实际校园事件提交。
+
+中断后可直接告诉 Agent：“继续初始化 SZTU Connect，读取已有状态，核对并补齐未完成项，不覆盖我的文件。”初始化不会自动读取聊天历史、启用 Computer History 或导入你的原件。
 
 ### 准备一条记录
 
@@ -104,29 +126,10 @@
 
 需要把私人聊天、完整电脑活动流和带有EXIF信息的原图上传到公开仓库。本项目需要通过代为保存原件作为事实依据。
 
-### 配置本地环境
-
-需要 Python 3.11 或更高版本。先 clone 或 fork 本仓库，再在你自己的仓库副本根目录执行：
-
-```bash
-python3 -m venv .venv
-source .venv/bin/activate
-python -m pip install -r requirements.lock
-python -m pip install --no-deps -e .
-
-sztu-connect doctor
-sztu-connect check --json
-python -m unittest discover -s tests
-```
-
-安装插件只让工作流可被发现，不会自动完成 Python 环境安装；记录应写入你自己的仓库，而不是插件缓存目录。详见 [插件使用说明](docs/PLUGIN.md)。
-
-### 请 Agent 整理并核对结果
-
 让 Agent 开始第一条记录时，可以直接说：
 
 ```text
-使用 record-campus-event skill，根据我提供的来源创建一个事件。
+请读取 skills/record-campus-event/SKILL.md，根据我提供的来源创建一个事件。
 自动查找或建立相关人物、组织、地点、制度与主题节点，并生成双向链接索引。
 保留可核查的姓名、日期和上下文；不要猜测未知信息。
 完成后运行 sztu-connect check --json。
@@ -134,7 +137,46 @@ python -m unittest discover -s tests
 
 核对草稿中的事件时间、每条论断的来源、关联对象与公开范围；来源之间有分歧时并列保留。确认记录后再次运行 `sztu-connect check --json`，检查通过后可查看生成的 [时间线](data/generated/timeline.json)、[反向链接](data/generated/backlinks.json) 与 [目录索引](data/generated/directories/)。没有正式记录时，索引为空是正常结果。
 
-可以先查看 [最小结构示例](examples/minimal/)：其中的 [事件](examples/minimal/content/events/2024/event-example-structure/event.json) 引用 [来源](examples/minimal/sources/source-example-documentation.json)，关联 [五类目录节点](examples/minimal/content/nodes/)，并由 [四种史体集合](examples/minimal/content/collections/) 展示不同组织方式。它不代表真实校园史料，也不会自动进入正式索引；不要把示例当作实际校园事件提交。
+### 需要时连接 GitHub
+
+本地记录不要求 GitHub 账号。需要同步或贡献时，再请 Agent 按 [GitHub 接入指引](docs/GETTING_STARTED.md#需要时连接-github) 检查授权和目标仓库权限：有写权限使用工作分支，没有写权限则复用或创建 Fork。浏览器登录由你完成，不需要把 Token 发到聊天里；已有远端配置会保留。
+
+初始化本身不会推送、创建 PR 或合并。插件使用方式见 [插件说明](docs/PLUGIN.md)。
+
+### 开发者手动安装
+
+<details>
+<summary>查看 Python、虚拟环境、安装和检查命令</summary>
+
+需要 Git 与 Python 3.11 或更高版本。先 clone 本仓库，再在自己的工作副本根目录执行。GitHub 登录和 Fork 都不是手动本地安装的前提。
+
+macOS / Linux：
+
+```bash
+python3 -m venv .venv
+.venv/bin/python -m pip install -r requirements.lock
+.venv/bin/python -m pip install --no-deps -e .
+.venv/bin/python -m sztu_connect doctor
+.venv/bin/python -m sztu_connect check --json
+.venv/bin/python -m unittest discover -s tests
+```
+
+Windows PowerShell（使用已确认满足版本要求的 Python）：
+
+```powershell
+python -m venv .venv
+& ".\.venv\Scripts\python.exe" -m pip install -r requirements.lock
+& ".\.venv\Scripts\python.exe" -m pip install --no-deps -e .
+& ".\.venv\Scripts\python.exe" -m sztu_connect doctor
+& ".\.venv\Scripts\python.exe" -m sztu_connect check --json
+& ".\.venv\Scripts\python.exe" -m unittest discover -s tests
+```
+
+以上命令不要求激活虚拟环境，也不修改全局 Python 包。若已在 macOS / Linux 执行 `source .venv/bin/activate`，可以直接使用 `sztu-connect doctor`、`sztu-connect check --json` 和 `python -m unittest discover -s tests`。
+
+安装插件只让工作流可被发现，不会自动完成 Python 环境安装；初始化 Skill 会引导 Agent 按共用指南准备环境。记录应写入自己的仓库，而不是插件缓存目录。手动安装只准备核心 CLI，附带工具与隔离示例仍按 [上手指南](docs/GETTING_STARTED.md) 核验。
+
+</details>
 
 ### 聊天记录与 Computer History
 
@@ -181,7 +223,9 @@ Event、Source、Node、Collection 的 JSON/Markdown 是唯一真源；所有目
 
 ```text
 .codex-plugin/       Codex plugin manifest
-skills/              Plugin 可发现的 Agent 工作流
+skills/              各 Agent 共用的工作流；Plugin 从此处发现
+scripts/bootstrap.py 项目内初始化与只读检查助手
+docs/GETTING_STARTED.md 共用上手指南
 content/events/      事件真源
 content/nodes/       人物、组织、地点、制度与主题节点
 content/collections/ 多种史体与专题组织

@@ -5,7 +5,7 @@ description: Map a lawfully obtained, user-selected chat export into SZTU Connec
 
 # Map chat material
 
-1. Work in a user-selected SZTU Connect clone with the pinned local CLI installed as described in `README.md`. Read `docs/CHAT_IMPORT.md`. Inventory the original through `sztu-connect ingest`; do not decrypt, execute, modify, or publish it.
+1. Work in a user-selected SZTU Connect clone with the pinned local CLI available; if the environment is missing, follow `docs/GETTING_STARTED.md` first. Read `docs/CHAT_IMPORT.md`. Inventory the original through `sztu-connect ingest`; do not decrypt, execute, modify, or publish it.
 2. Map selected messages to `schemas/chat-message.schema.json`. Preserve display names when relevant and lawful; do not anonymize by default.
 3. Validate with `sztu-connect validate-chat <file> --json`. Rendering is optional and writes only under `.work/`.
 4. Create a Source record for the selected export or excerpt. Use message IDs as Citation locators.

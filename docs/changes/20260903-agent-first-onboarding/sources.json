@@ -1,0 +1,284 @@
+{
+  "researched_on": "2026-09-03",
+  "sources": [
+    {
+      "id": "oss-agent-reach",
+      "owner": "Panniantong",
+      "accessed": "2026-09-03",
+      "url": "https://github.com/Panniantong/Agent-Reach/blob/da5044d26fc6adddb6554d5679c94ac22e76e428/docs/install.md",
+      "claims": [
+        "human prompt points at Agent install guide",
+        "dependency check and doctor feedback loop"
+      ],
+      "exclude": [
+        "account Cookie workflows",
+        "global install scope",
+        "timing promises"
+      ]
+    },
+    {
+      "id": "oss-superpowers",
+      "owner": "obra",
+      "accessed": "2026-09-03",
+      "url": "https://github.com/obra/superpowers/blob/b36e0829c6d0140e93cfef2ca599b1b07d4a7797/README.md#installation",
+      "claims": [
+        "separate native harness distribution",
+        "explicit remote install guide"
+      ],
+      "exclude": [
+        "obsolete Codex .codex/INSTALL.md"
+      ]
+    },
+    {
+      "id": "oss-gstack",
+      "owner": "garrytan",
+      "accessed": "2026-09-03",
+      "url": "https://github.com/garrytan/gstack/blob/0d1bd5616c0ef096bb7ccee336f63c60ee408618/README.md#install--30-seconds",
+      "claims": [
+        "natural language install",
+        "setup helper and first valuable action"
+      ],
+      "exclude": [
+        "silent auto-update",
+        "automatic commits",
+        "browser routing overrides"
+      ]
+    },
+    {
+      "id": "codex",
+      "owner": "OpenAI",
+      "accessed": "2026-09-03",
+      "urls": [
+        "https://learn.chatgpt.com/docs/build-skills",
+        "https://learn.chatgpt.com/docs/agent-configuration/agents-md",
+        "https://learn.chatgpt.com/docs/plugins"
+      ],
+      "claims": [
+        "AGENTS instruction chain",
+        "native plugin and skill discovery differ",
+        "plugin does not prepare repository Python"
+      ]
+    },
+    {
+      "id": "claude",
+      "owner": "Anthropic",
+      "accessed": "2026-09-03",
+      "url": "https://code.claude.com/docs/en/memory",
+      "claims": [
+        "CLAUDE.md imports AGENTS.md",
+        "AGENTS.md not automatically read"
+      ]
+    },
+    {
+      "id": "workbuddy",
+      "owner": "Tencent",
+      "accessed": "2026-09-03",
+      "urls": [
+        "https://www.codebuddy.cn/docs/workbuddy/From-Beginner-to-Expert-Guide/Function-Description/Task-Bar",
+        "https://open.workbuddy.cn/en/docs/skill"
+      ],
+      "claims": [
+        "workspace picker",
+        "Craft execution vs Ask",
+        "native skill import"
+      ],
+      "uncertain": [
+        "AGENTS.md auto-discovery"
+      ]
+    },
+    {
+      "id": "deepseek-harness",
+      "owner": "DeepSeek",
+      "accessed": "2026-09-03",
+      "urls": [
+        "https://www.deepseek.com/harness/en/",
+        "https://github.com/deepseek-ai/deepseek-harness/blob/master/packages/context/agent-instructions/README.md"
+      ],
+      "claims": [
+        "official dsh developer preview",
+        "AGENTS/CLAUDE chain",
+        "no @path expansion"
+      ]
+    },
+    {
+      "id": "kimi-code",
+      "owner": "Moonshot AI",
+      "accessed": "2026-09-03",
+      "urls": [
+        "https://www.kimi.ai/zh-hans/help/kimi-code/cli-getting-started",
+        "https://moonshotai.github.io/kimi-code/en/customization/skills"
+      ],
+      "claims": [
+        "local file and shell Agent",
+        "Win/mac available",
+        "standard SKILL and .agents/skills"
+      ],
+      "exclude": [
+        "old-version ~/.kimi path claims",
+        "regenerating existing AGENTS via /init"
+      ]
+    },
+    {
+      "id": "zcode",
+      "owner": "Z.ai",
+      "accessed": "2026-09-03",
+      "url": "https://zcode.z.ai/en/docs/agents",
+      "claims": [
+        "local workspace",
+        "root AGENTS only, no imports",
+        "projectless task cannot later switch to project"
+      ]
+    },
+    {
+      "id": "cursor",
+      "owner": "Cursor",
+      "accessed": "2026-09-03",
+      "urls": [
+        "https://cursor.com/docs/rules",
+        "https://cursor.com/docs/agent/overview"
+      ],
+      "claims": [
+        "root/nested AGENTS",
+        "Agent file and terminal tools"
+      ],
+      "exclude": [
+        "obsolete root-only v1.5 limitations"
+      ]
+    },
+    {
+      "id": "traework",
+      "owner": "TRAE",
+      "accessed": "2026-09-03",
+      "urls": [
+        "https://docs.trae.cn/work_rules",
+        "https://docs.trae.cn/work_sandbox"
+      ],
+      "claims": [
+        "AGENTS import setting required",
+        "Windows Code local vs Work/Design virtual",
+        "cloud != host"
+      ]
+    },
+    {
+      "id": "qoderwork",
+      "owner": "Qoder",
+      "accessed": "2026-09-03",
+      "urls": [
+        "https://docs.qoder.com/qoderwork/skills",
+        "https://docs.qoder.com/qoderwork/quick-start",
+        "https://docs.qoder.com/qoderwork/file-management"
+      ],
+      "claims": [
+        "user confirmed identity",
+        "Skill GitHub URL install",
+        "authorized working folder",
+        "Win/mac support"
+      ],
+      "uncertain": [
+        "AGENTS autodiscovery",
+        "full host-shell mapping"
+      ]
+    },
+    {
+      "id": "github",
+      "owner": "GitHub",
+      "accessed": "2026-09-03",
+      "urls": [
+        "https://cli.github.com/manual/gh_auth_login",
+        "https://cli.github.com/manual/gh_repo_fork"
+      ],
+      "claims": [
+        "browser OAuth",
+        "credential-store fallback needs attention",
+        "fork can mutate origin/upstream so explicit remote handling"
+      ]
+    },
+    {
+      "id": "local",
+      "owner": "SZTU Connect",
+      "accessed": "2026-09-03",
+      "paths": [
+        "src/sztu_connect/cli.py",
+        ".github/workflows/checks.yml",
+        "README.md",
+        "docs/PLUGIN.md",
+        "tests/test_repository.py"
+      ],
+      "claims": [
+        "no bootstrap currently",
+        "53-test baseline from prior verified commit",
+        "CI Ubuntu only",
+        "empty skeleton assertion not valid after records"
+      ],
+      "base": "eb30c774db2f76752a0ed6d9da02ee42d6aeac11"
+    },
+    {
+      "id": "bootstrap-runtime-installers",
+      "owner": "Python Software Foundation / Git / Git LFS / GitHub",
+      "accessed": "2026-09-03",
+      "urls": [
+        "https://www.python.org/downloads/",
+        "https://git-scm.com/install/",
+        "https://git-lfs.com/",
+        "https://cli.github.com/"
+      ],
+      "claims": [
+        "official installation entry points used when host dependencies are missing"
+      ],
+      "exclude": [
+        "automatic global installation without user authorization",
+        "unpinned third-party installer substitutions"
+      ]
+    }
+  ],
+  "gaps": [
+    {
+      "claim": "一句话+Agent指南已有开源先例",
+      "evidence": "Agent Reach install.md、Superpowers README、gstack README 已主代理核对固定SHA",
+      "confidence": "high",
+      "gap": "无需要进一步研究的缺口"
+    },
+    {
+      "claim": "不能将9种客户端当作同一种插件宿主",
+      "evidence": "各厂商AGENTS、Skill、plugin、workspace官方页；主代理复核关键限制",
+      "confidence": "high",
+      "gap": "WorkBuddy/QoderWork未找到AGENTS自动读取承诺，采用显式指南/原生Skill入口"
+    },
+    {
+      "claim": "多数可复用AGENTS但上下文加载不同",
+      "evidence": "Codex docs、Claude memory、Cursor rules、Kimi skills、dsh instructions、ZCode agents、TraeWork rules",
+      "confidence": "high",
+      "gap": "不得通过host /init重写现有项目约定；加载后需要实际读取指南"
+    },
+    {
+      "claim": "本机初始化必须区别云端/隔离运行环境",
+      "evidence": "TraeWork sandbox Windows Work/Design vs Code；QoderWork docs未完整说明任意shell映射",
+      "confidence": "high / QoderWork mapping unknown",
+      "gap": "运行时探测+真实客户端验证；失败明确交接而不标完成"
+    },
+    {
+      "claim": "GitHub可延后，授权与Fork可由Agent引导",
+      "evidence": "用户明确选择、gh auth login/gh repo fork官方页",
+      "confidence": "high",
+      "gap": "实际OAuth/MFA由用户完成；既有remotes和认证不可静默覆盖"
+    },
+    {
+      "claim": "项目需新增bootstrap与可恢复状态",
+      "evidence": "main cli.py无init，doctor只检查部分文件与Python；CI仅Ubuntu；当前main工作树干净",
+      "confidence": "high",
+      "gap": "进入执行模式后实现，当前未改文件"
+    },
+    {
+      "claim": "首轮安装附带工具",
+      "evidence": "用户选择；添加可信来源工具存档任务仍active、尚未入当前main",
+      "confidence": "dependency_pending",
+      "gap": "消费该任务固定版本、授权、平台、SHA-256/LFS清单；不自行重选工具"
+    },
+    {
+      "claim": "Win/mac、9客户端真实端到端成功",
+      "evidence": "本轮仅只读研究与静态检查",
+      "confidence": "unverified",
+      "gap": "实施后记录版本、OS、入口、重跑和失败恢复；未测明确标记"
+    }
+  ]
+}
