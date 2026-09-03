@@ -309,10 +309,16 @@ class BootstrapTests(unittest.TestCase):
     def test_pip_cannot_be_redirected_to_global_install_directories(self) -> None:
         with mock.patch.dict(os.environ, {
             "PYTHONPATH": "/elsewhere", "PYTHONHOME": "/elsewhere", "PIP_TARGET": "/global",
-            "PIP_PREFIX": "/global", "PIP_USER": "true",
+            "PIP_PREFIX": "/global", "PIP_ROOT": "/global", "PIP_USER": "true",
+            "PIP_PYTHON": "/other/python", "PIP_LOG": "/elsewhere/pip.log",
+            "PIP_REPORT": "/elsewhere/report.json", "PIP_SRC": "/elsewhere/source",
+            "PIP_BUILD_TRACKER": "/elsewhere/build-state",
         }):
             env = bootstrap.process_env(self.root)
-        for name in ("PYTHONPATH", "PYTHONHOME", "PIP_TARGET", "PIP_PREFIX"):
+        for name in (
+            "PYTHONPATH", "PYTHONHOME", "PIP_TARGET", "PIP_PREFIX", "PIP_ROOT",
+            "PIP_PYTHON", "PIP_LOG", "PIP_REPORT", "PIP_SRC", "PIP_BUILD_TRACKER",
+        ):
             self.assertNotIn(name, env)
         self.assertEqual(env["PIP_USER"], "0")
         self.assertEqual(env["PIP_REQUIRE_VIRTUALENV"], "true")
@@ -348,6 +354,54 @@ class BootstrapTests(unittest.TestCase):
 
     def test_missing_registry_is_pending_not_tool_install_success(self) -> None:
         self.assertEqual(bootstrap.inspect_tools(self.root, "Darwin", "arm64")["reason"], "registry_pending")
+
+    def test_example_outputs_without_a_receipt_are_not_overwritten(self) -> None:
+        inputs = bootstrap.example_inputs(self.root)
+        revision = bootstrap.example_revision(self.root, inputs)
+        destination = self.root / ".work/onboarding/examples" / revision
+        for name, content in inputs.items():
+            path = destination / name
+            path.parent.mkdir(parents=True, exist_ok=True)
+            path.write_bytes(content)
+        transcript = destination / ".work/chat/transcript.html"
+        transcript.parent.mkdir(parents=True)
+        transcript.write_text("user output without an acceptance receipt", encoding="utf-8")
+        before = snapshot(destination)
+        for check in (True, False):
+            with self.subTest(check=check), mock.patch.object(bootstrap, "run_cli") as command:
+                result = bootstrap.prepare_example(self.root, check, [])
+            self.assertEqual(result["status"], "pending_user")
+            self.assertEqual(result["reason"], "unverified_outputs")
+            self.assertEqual(before, snapshot(destination))
+            command.assert_not_called()
+
+    def test_delivered_registry_selects_pinned_platform_assets_without_downloads(self) -> None:
+        registry = json.loads((ROOT / "importers/registry.json").read_text(encoding="utf-8"))
+        write_json(self.root / "importers/registry.json", registry)
+        primary = next(tool for tool in registry["tools"] if tool["id"] == "ciphertalk")
+        before = snapshot(self.root)
+        for system, architecture, expected_platform in (
+            ("Darwin", "arm64", "macOS"), ("Windows", "AMD64", "Windows"),
+        ):
+            with self.subTest(system=system), \
+                    mock.patch.object(bootstrap, "installed_ciphertalk", return_value=None), \
+                    mock.patch.object(bootstrap, "urlopen") as network:
+                result = bootstrap.inspect_tools(self.root, system, architecture)
+            self.assertEqual(result["status"], "pending_user")
+            items = {item["id"]: item for item in result["items"]}
+            self.assertEqual(set(items), {"ciphertalk", "wechatmsg"})
+            item = items["ciphertalk"]
+            asset = next(asset for asset in primary["downloads"]
+                         if asset["platform"] == expected_platform)
+            self.assertEqual(item["version"], primary["version"])
+            self.assertEqual(item["download_url"], asset["url"])
+            self.assertEqual(item["sha256"], asset["sha256"])
+            self.assertEqual(item["size_bytes"], asset["size_bytes"])
+            self.assertEqual(item["payload"]["reason"], "missing_payload")
+            self.assertEqual(items["wechatmsg"]["status"], "not_applicable")
+            self.assertFalse(result["execution_tested"])
+            network.assert_not_called()
+        self.assertEqual(before, snapshot(self.root))
 
     def test_payload_requires_exact_size_hash_and_actual_lfs_bytes(self) -> None:
         asset, path = self.registry()
@@ -546,6 +600,7 @@ class BootstrapIntegrationTests(unittest.TestCase):
         cache.mkdir(parents=True, exist_ok=True)
         with tempfile.TemporaryDirectory(prefix="bootstrap-integration-", dir=cache) as directory:
             root = checkout(Path(directory))
+            external_pip_output = Path(directory) / "outside-checkout"
             # Non-empty formal data must not be interpreted as a failed setup.
             shutil.copytree(root / "examples/minimal/content", root / "content")
             shutil.copytree(root / "examples/minimal/sources", root / "sources/records")
@@ -556,7 +611,14 @@ class BootstrapIntegrationTests(unittest.TestCase):
                     [sys.executable, "-B", str(root / "scripts/bootstrap.py"),
                      "--root", str(root), "--json", *flags],
                     cwd=root, capture_output=True, text=True, encoding="utf-8", timeout=600,
-                    env={**os.environ, "PYTHONDONTWRITEBYTECODE": "1", "PYTHONUTF8": "1"},
+                    env={
+                        **os.environ, "PYTHONDONTWRITEBYTECODE": "1", "PYTHONUTF8": "1",
+                        "PIP_ROOT": str(external_pip_output),
+                        "PIP_PYTHON": str(external_pip_output / "python"),
+                        "PIP_LOG": str(external_pip_output / "pip.log"),
+                        "PIP_REPORT": str(external_pip_output / "report.json"),
+                        "PIP_BUILD_TRACKER": str(external_pip_output / "build-state"),
+                    },
                 )
                 self.assertEqual(result.returncode, 1, result.stdout + result.stderr)
                 return json.loads(result.stdout)["data"]
@@ -566,7 +628,7 @@ class BootstrapIntegrationTests(unittest.TestCase):
             self.assertEqual(before, snapshot(root))
             first = run()
             self.assertTrue(first["local_ready"], first)
-            self.assertFalse(first["ok"])  # Archives are an explicit external dependency.
+            self.assertFalse(first["ok"])  # This fixture deliberately omits the tool registry.
             self.assertEqual(first["stages"]["tools"]["reason"], "registry_pending")
             self.assertEqual(first["stages"]["github"]["route"], "local_only")
             example = first["stages"]["example"]
@@ -595,6 +657,7 @@ class BootstrapIntegrationTests(unittest.TestCase):
             self.assertEqual(result.returncode, 2, result.stdout + result.stderr)
             self.assertEqual(Path(example["chat_html"]).read_text(encoding="utf-8"), "my notes")
             self.assertEqual(canonical, {key: snapshot(root / key) for key in ("content", "sources")})
+            self.assertFalse(external_pip_output.exists())
 
 
 if __name__ == "__main__":

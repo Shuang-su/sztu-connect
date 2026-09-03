@@ -108,7 +108,12 @@ def check_tree(root: Path, relative: str, *, venv: bool = False) -> Path:
 
 def process_env(root: Path) -> dict[str, str]:
     env = dict(os.environ)
-    for name in ("PYTHONPATH", "PYTHONHOME", "PIP_TARGET", "PIP_PREFIX"):
+    # Inherited pip options must not redirect installs, build state, or detailed
+    # logs outside this checkout, nor choose a different interpreter.
+    for name in (
+        "PYTHONPATH", "PYTHONHOME", "PIP_TARGET", "PIP_PREFIX", "PIP_ROOT",
+        "PIP_PYTHON", "PIP_LOG", "PIP_REPORT", "PIP_SRC", "PIP_BUILD_TRACKER",
+    ):
         env.pop(name, None)
     env.update({
         "PYTHONDONTWRITEBYTECODE": "1", "PYTHONNOUSERSITE": "1",
@@ -304,6 +309,13 @@ def prepare_example(root: Path, check: bool, operations: list[dict[str, Any]]) -
     transcript = destination / ".work/chat/transcript.html"
     export = destination / ".work/knowledge/chunks.jsonl"
     outputs = (generated, transcript, export)
+    if not receipt_path.is_file() and any(
+        path.exists() and (not path.is_dir() or any(path.iterdir())) for path in outputs
+    ):
+        # Without a receipt, even apparently derived files may be user-owned.
+        # Do not guess that they came from an interrupted bootstrap invocation.
+        return stage("pending_user", "已有示例输出但缺少验收回执；保留文件，请先核对来源与恢复方式。",
+                     reason="unverified_outputs")
     for command in ("doctor", "validate", "privacy-scan"):
         run_cli(root, destination, [command])
     run_cli(root, destination, ["validate-chat", str(destination / "examples/chat/messages.example.jsonl")])
