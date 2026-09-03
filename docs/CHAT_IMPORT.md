@@ -2,7 +2,7 @@
 
 v0.1 只有平台无关 JSONL Schema、校验和通用 HTML renderer；没有微信数据库解析、解密、密钥提取或自动 normalizer。
 
-Agent 可以在用户明确提供合法导出文件时，按 `schemas/chat-message.schema.json` 映射字段。保留原时间、消息 ID、回复关系和可核查显示名；不需要默认匿名化。若使用化名、最小化或脱敏，必须在字段中明确表示，不能把处理后的文本冒充原文。
+Agent 可以在用户提供导出文件时，按 `schemas/chat-message.schema.json` 映射字段。保留原时间、消息 ID、回复关系和可核查显示名；不需要默认匿名化。若使用化名、最小化，必须在字段中明确表示，不能把处理后的文本冒充原文。
 
 ```bash
 sztu-connect validate-chat examples/chat/messages.example.jsonl --json

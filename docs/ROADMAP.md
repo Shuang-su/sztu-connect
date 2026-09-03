@@ -9,7 +9,6 @@
 - 编年体、纪传体、典制体和专题 Collection
 - Codex plugin + 本地 CLI
 - 供应商无关知识 JSONL
-- 分级隐私扫描
 
 ## 下一步
 
