@@ -1,0 +1,3 @@
+# Preserve upstream bytes on every checkout; these are ordinary Git files, not LFS.
+wechat/**/*.tar.gz -text -filter
+wechat/**/LICENSE.* -text -filter
