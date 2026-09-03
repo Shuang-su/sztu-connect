@@ -70,4 +70,6 @@ README 经过 GitHub Markdown API 的 GFM 渲染，再在仅绑定回环地址�
 
 ## Checkpoint
 
-实现与完整验证先形成一个本地 checkpoint；其 SHA 随后补入本记录。最后的记录提交 SHA 在面向用户的回复中报告，避免文档自引用尚未生成的自身 SHA。
+- `a488a3fda283f7ab4987506a21dd388794e996e9` — `docs(onboarding): add authorized first exploration workflow`，包含本轮 README、共用指南、薄 Skill / 插件路由、回归与合成夹具，以及请求、计划、依据和验证记录；共 20 个文件。
+- 实现 checkpoint 创建后工作树干净。本记录补入实际 SHA 后单独提交，最终记录提交 SHA 在面向用户的回复中报告，避免文档自引用尚未生成的自身 SHA。
+- 本轮只提交当前 `codex/agent-first-onboarding` 分支；没有 push、PR、合并或更改 `main`。
