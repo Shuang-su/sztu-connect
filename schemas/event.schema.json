@@ -1,7 +1,7 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "urn:sztu-connect:schema:event:0.1.0",
-  "title": "SZTU Connect event",
+  "title": "Digital SZTU event",
   "type": "object",
   "additionalProperties": false,
   "required": [

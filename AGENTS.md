@@ -1,16 +1,16 @@
-# SZTU Connect Agent Instructions
+# Digital SZTU Agent Instructions
 
 ## 公开标识
 
-- 标准名称、公开名称、插件名称、包名、命令行和协议字段统一使用 `SZTU Connect`。
-- 中文叙述需要中文名称时使用“技大时空”。
+- 公开名称使用 `Digital SZTU`。仓库、安装包、插件和主命令统一为 `digital-sztu`，Python 主模块为 `digital_sztu`。
+- 旧命令、旧模块与旧初始化 Skill 作为兼容入口保留；不因更名改写稳定 ID、历史记录或 v0.1 协议标识。
 - README 首页可以展示已经批准的附属标题；
 
 除 README 首页已经批准的文案外，不在其他项目文档扩散附属标题或口号。
 
 ## 初始化与工作流入口
 
-用户要求开始使用、安装、初始化或继续配置时，先读取 `docs/GETTING_STARTED.md`；可使用 `skills/setup-sztu-connect/SKILL.md` 路由。工作副本与现有状态核对后再执行，不能在插件缓存目录中初始化或写记录。不要用客户端自己的 `/init` 覆盖本文件或 `CLAUDE.md`。
+用户要求开始使用、安装、初始化或继续配置时，先读取 `docs/GETTING_STARTED.md`；可使用 `skills/setup-digital-sztu/SKILL.md` 路由。工作副本与现有状态核对后再执行，不能在插件缓存目录中初始化或写记录。不要用客户端自己的 `/init` 覆盖本文件或 `CLAUDE.md`。
 
 根 `skills/` 是所有客户端共用的工作流来源。没有原生 Skill 发现能力时显式读取相应 `SKILL.md`，不维护另一份镜像。基础初始化准备环境、适用工具和隔离示例；支持 Computer Use 时，Agent 按共用指南完成适用的图形步骤，系统与产品授权仍由用户确认。
 
@@ -44,24 +44,24 @@
 ## 命令
 
 ```bash
-sztu-connect doctor
-sztu-connect validate --json
-sztu-connect privacy-scan --json
-sztu-connect build --json
-sztu-connect check --json
+digital-sztu doctor
+digital-sztu validate --json
+digital-sztu privacy-scan --json
+digital-sztu build --json
+digital-sztu check --json
 python -m unittest discover -s tests
 ```
 
 本地材料只做清点时：
 
 ```bash
-sztu-connect ingest <path> --dry-run --json
+digital-sztu ingest <path> --dry-run --json
 ```
 
 生成向量知识库输入时：
 
 ```bash
-sztu-connect export-knowledge --json
+digital-sztu export-knowledge --json
 ```
 
 ## 写入边界

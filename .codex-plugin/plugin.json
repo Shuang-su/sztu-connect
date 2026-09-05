@@ -1,13 +1,13 @@
 {
-  "name": "sztu-connect",
-  "version": "0.1.0",
-  "description": "Event-centered, source-linked local archive workflows for SZTU Connect.",
+  "name": "digital-sztu",
+  "version": "0.1.1",
+  "description": "Event-centered, source-linked local archive workflows for Digital SZTU.",
   "author": {
-    "name": "SZTU Connect contributors",
+    "name": "Digital SZTU contributors",
     "url": "https://github.com/Shuang-su"
   },
-  "homepage": "https://github.com/Shuang-su/sztu-connect",
-  "repository": "https://github.com/Shuang-su/sztu-connect",
+  "homepage": "https://github.com/Shuang-su/digital-sztu",
+  "repository": "https://github.com/Shuang-su/digital-sztu",
   "license": "Apache-2.0",
   "keywords": [
     "archive",
@@ -18,10 +18,10 @@
   ],
   "skills": "./skills/",
   "interface": {
-    "displayName": "SZTU Connect",
+    "displayName": "Digital SZTU",
     "shortDescription": "以事件和来源组织可核查记录",
-    "longDescription": "SZTU Connect（技大时空）以事件和来源组织可核查的校园记录，由 Agent 关联人物、组织、地点、制度、主题与相关事件，并生成类似 Notion／Obsidian 的反向链接；支持多种史体与供应商无关的知识 JSONL。",
-    "developerName": "SZTU Connect contributors",
+    "longDescription": "Digital SZTU以事件和来源组织可核查的校园记录，由 Agent 关联人物、组织、地点、制度、主题与相关事件，并生成类似 Notion／Obsidian 的反向链接；支持多种史体与供应商无关的知识 JSONL。",
+    "developerName": "Digital SZTU contributors",
     "category": "Productivity",
     "capabilities": [
       "Local files",
@@ -29,7 +29,7 @@
       "Fact checking"
     ],
     "defaultPrompt": [
-      "使用 setup-sztu-connect 初始化，借助可用 Computer Use 配置工具；我授权清点桌面、下载、文档及所选材料后分批阅读，启用可用 Computer History 查全部保留历史并建议选题。",
+      "使用 setup-digital-sztu 初始化，借助可用 Computer Use 配置工具；我授权清点桌面、下载、文档及所选材料后分批阅读，启用可用 Computer History 查全部保留历史并建议选题。",
       "根据来源创建一个事件，并自动关联相关目录。",
       "核查这个事件的论断、来源与双向链接。"
     ]

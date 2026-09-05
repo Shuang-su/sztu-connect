@@ -2,7 +2,7 @@
 
 ## 目标
 
-`sztu-connect build` 与 `sztu-connect export-knowledge` 把 Event、Node、Collection 与 Source 生成供应商无关 JSONL。它可供全文搜索、RAG、图检索或任意向量数据库消费，但核心仓库不依赖远程服务、模型或 API key。
+`digital-sztu build` 与 `digital-sztu export-knowledge` 把 Event、Node、Collection 与 Source 生成供应商无关 JSONL。它可供全文搜索、RAG、图检索或任意向量数据库消费，但核心仓库不依赖远程服务、模型或 API key。
 
 ```text
 data/generated/knowledge/chunks.jsonl
