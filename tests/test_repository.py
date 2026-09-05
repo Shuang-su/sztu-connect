@@ -757,17 +757,17 @@ class RepositoryTests(unittest.TestCase):
         output = render_chat(messages, "Example")
         self.assertNotIn("<script>alert(1)</script>", output)
         self.assertIn("&lt;script&gt;", output)
-        self.assertIn("SZTU Connect／技大时空", output)
+        self.assertIn("Digital SZTU", output)
         self.assertNotIn("🐔🧱时空", output)
 
     def test_name_contract(self) -> None:
         config = load_json(ROOT / "connect.config.json")["project"]
-        self.assertEqual(config["display_name"], "SZTU Connect")
-        self.assertEqual(config["plain_text_name"], "SZTU Connect")
-        self.assertEqual(config["accessible_name"], "技大时空")
+        self.assertEqual(config["display_name"], "Digital SZTU")
+        self.assertEqual(config["plain_text_name"], "Digital SZTU")
+        self.assertEqual(config["accessible_name"], "Digital SZTU")
 
         plugin = load_json(ROOT / ".codex-plugin" / "plugin.json")
-        self.assertEqual(plugin["interface"]["displayName"], "SZTU Connect")
+        self.assertEqual(plugin["interface"]["displayName"], "Digital SZTU")
 
 
 if __name__ == "__main__":

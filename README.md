@@ -1,9 +1,9 @@
-# SZTU Connect
+# Digital SZTU
 <br>
 
 
 
-技大时空是一个深圳技术大学的数字档案计划
+Digital SZTU，一个深圳技术大学的数字档案计划。
 
 为 Agent Plugin 适配与优化，致力于让更多人能够轻松存档发生在 🐔🧱 的故事，远期目标是打造通用的校园 RAG 知识库。
 
@@ -46,10 +46,10 @@
 打开你熟悉、能够操作本地文件和命令的 Agent，选择一个用于保存项目的文件夹，把下面这句话发给它：
 
 ```text
-请阅读 https://raw.githubusercontent.com/Shuang-su/sztu-connect/main/docs/GETTING_STARTED.md ，按指引在本机安装并初始化 SZTU Connect，在支持的客户端中启用并使用 Computer Use 安装并配置适用工具、跑通示例。我授权你随后读取我本地所有文件和我另外提供或选定的材料，并在本机桌面、下载和文档目录中发现候选资料，列出文件清单后自动分批阅读；在支持的客户端中启用并使用 Computer History，从全部现有保留历史中查找校园相关线索，给出初步记录建议，再带我选择第一件事继续。
+请阅读 https://raw.githubusercontent.com/Shuang-su/digital-sztu/main/docs/GETTING_STARTED.md ，按指引在本机安装并初始化 Digital SZTU，在支持的客户端中启用并使用 Computer Use 安装并配置适用工具、跑通示例。我授权你随后读取我本地所有文件和我另外提供或选定的材料，并在本机桌面、下载和文档目录中发现候选资料，列出文件清单后自动分批阅读；在支持的客户端中启用并使用 Computer History，从全部现有保留历史中查找校园相关线索，给出初步记录建议，再带我选择第一件事继续。
 ```
 
-- **开始前**：准备一种可正常工作的本地客户端即可，不必安装全部客户端，也不必先安装 SZTU Connect 专属插件。
+- **开始前**：准备一种可正常工作的本地客户端即可，不必安装全部客户端，也不必先安装 Digital SZTU 专属插件。
 - **Agent 会完成**：获取项目、准备环境、配置适用工具并验证示例；随后按授权探索材料和历史线索，给出有来源的记录建议，告诉你结果保存在哪里。
 - **你可能需要完成**：确认安装位置、处理系统权限、产品首次启用或安装窗口；需要同步时，再登录 GitHub。你不需要自己编写安装命令，但这不意味着全程零确认。
 
@@ -65,7 +65,7 @@ Agent 会分别报告基础环境、附带工具、示例和 GitHub 状态，并
 
 示例写入忽略目录 `.work/onboarding/`，不进入正式记录。可以先查看 [最小结构示例](examples/minimal/)：其中的 [事件](examples/minimal/content/events/2024/event-example-structure/event.json) 引用 [来源](examples/minimal/sources/source-example-documentation.json)，关联 [五类目录节点](examples/minimal/content/nodes/)，并由 [四种史体集合](examples/minimal/content/collections/) 展示不同组织方式。它不代表真实校园史料，也不会自动进入正式索引；不要把示例当作实际校园事件提交。
 
-中断后可直接告诉 Agent：“继续初始化 SZTU Connect，读取已有状态，核对并补齐未完成项，不覆盖我的文件。”只检查环境时不会读取个人材料；已经授权的探索按原范围接续，不因重开任务扩大范围。
+中断后可直接告诉 Agent：“继续初始化 Digital SZTU，读取已有状态，核对并补齐未完成项，不覆盖我的文件。”只检查环境时不会读取个人材料；已经授权的探索按原范围接续，不因重开任务扩大范围。
 
 ### 从材料中寻找记录线索
 
@@ -97,10 +97,10 @@ Agent 会分别报告基础环境、附带工具、示例和 GitHub 状态，并
 请读取 skills/record-campus-event/SKILL.md，根据我提供的来源创建一个事件。
 自动查找或建立相关人物、组织、地点、制度与主题节点，并生成双向链接索引。
 保留可核查的姓名、日期和上下文；不要猜测未知信息。
-完成后运行 sztu-connect check --json。
+完成后运行 digital-sztu check --json。
 ```
 
-核对草稿中的事件时间、每条论断的来源、关联对象与公开范围；来源之间有分歧时并列保留。确认记录后再次运行 `sztu-connect check --json`，检查通过后可查看生成的 [时间线](data/generated/timeline.json)、[反向链接](data/generated/backlinks.json) 与 [目录索引](data/generated/directories/)。没有正式记录时，索引为空是正常结果。
+核对草稿中的事件时间、每条论断的来源、关联对象与公开范围；来源之间有分歧时并列保留。确认记录后再次运行 `digital-sztu check --json`，检查通过后可查看生成的 [时间线](data/generated/timeline.json)、[反向链接](data/generated/backlinks.json) 与 [目录索引](data/generated/directories/)。没有正式记录时，索引为空是正常结果。
 
 ### 需要时连接 GitHub
 
@@ -121,8 +121,8 @@ macOS / Linux：
 python3 -m venv .venv
 .venv/bin/python -m pip install -r requirements.lock
 .venv/bin/python -m pip install --no-deps -e .
-.venv/bin/python -m sztu_connect doctor
-.venv/bin/python -m sztu_connect check --json
+.venv/bin/python -m digital_sztu doctor
+.venv/bin/python -m digital_sztu check --json
 .venv/bin/python -m unittest discover -s tests
 ```
 
@@ -132,12 +132,12 @@ Windows PowerShell（使用已确认满足版本要求的 Python）：
 python -m venv .venv
 & ".\.venv\Scripts\python.exe" -m pip install -r requirements.lock
 & ".\.venv\Scripts\python.exe" -m pip install --no-deps -e .
-& ".\.venv\Scripts\python.exe" -m sztu_connect doctor
-& ".\.venv\Scripts\python.exe" -m sztu_connect check --json
+& ".\.venv\Scripts\python.exe" -m digital_sztu doctor
+& ".\.venv\Scripts\python.exe" -m digital_sztu check --json
 & ".\.venv\Scripts\python.exe" -m unittest discover -s tests
 ```
 
-以上命令不要求激活虚拟环境，也不修改全局 Python 包。若已在 macOS / Linux 执行 `source .venv/bin/activate`，可以直接使用 `sztu-connect doctor`、`sztu-connect check --json` 和 `python -m unittest discover -s tests`。
+以上命令不要求激活虚拟环境，也不修改全局 Python 包。若已在 macOS / Linux 执行 `source .venv/bin/activate`，可以直接使用 `digital-sztu doctor`、`digital-sztu check --json` 和 `python -m unittest discover -s tests`。
 
 安装插件只让工作流可被发现，不会自动完成 Python 环境安装；初始化 Skill 会引导 Agent 按共用指南准备环境。记录应写入自己的仓库，而不是插件缓存目录。手动安装只准备核心 CLI，附带工具与隔离示例仍按 [上手指南](docs/GETTING_STARTED.md) 核验。
 
@@ -227,11 +227,11 @@ examples/minimal/    不进入正式索引的结构示例
 
 长期目标是在不改变 Event 历史语义的前提下，逐步建设社区可治理、Agent 可协作、证据优先、时间感知、本地可重建的校园知识基础设施。系统应保留来源、版本、矛盾与不确定性，并在证据不足、信息过期或问题前提错误时拒绝给出虚假的确定答案。
 
-这是一项长期路线，不代表 Knowledge Record、全文检索、混合检索、RAG、网站或持续监测已经实现。路线拆分与完成条件见 [长期路线 Issue #1](https://github.com/Shuang-su/sztu-connect/issues/1) 和 [项目路线](docs/ROADMAP.md)。
+这是一项长期路线，不代表 Knowledge Record、全文检索、混合检索、RAG、网站或持续监测已经实现。路线拆分与完成条件见 [长期路线 Issue #1](https://github.com/Shuang-su/digital-sztu/issues/1) 和 [项目路线](docs/ROADMAP.md)。
 
 ## 参与项目与获取帮助
 
-**想补充资料或更正记录**：不必从写代码开始。你可以在 [GitHub Issues](https://github.com/Shuang-su/sztu-connect/issues) 提供可公开的事件线索、出处和必要说明，补充、反驳或更正既有论断；也可以按照 [贡献指南](CONTRIBUTING.md) 在自己的仓库中整理后提交修改。请先核对 [事实核查要求](docs/FACT_CHECKING.md) 与 [隐私边界](docs/PRIVACY.md)。
+**想补充资料或更正记录**：不必从写代码开始。你可以在 [GitHub Issues](https://github.com/Shuang-su/digital-sztu/issues) 提供可公开的事件线索、出处和必要说明，补充、反驳或更正既有论断；也可以按照 [贡献指南](CONTRIBUTING.md) 在自己的仓库中整理后提交修改。请先核对 [事实核查要求](docs/FACT_CHECKING.md) 与 [隐私边界](docs/PRIVACY.md)。
 
 **想改进工具与体验**：可以从 Schema、校验与构建工具、数据质量、安全隐私、文档和示例入手；检索评测、RAG 与只读浏览体验按长期路线拆分。先在现有 Issue 中确认范围和依赖，再认领能够独立验证的任务。
 
@@ -241,7 +241,7 @@ examples/minimal/    不进入正式索引的结构示例
 
 ## 致谢
 
-SZTU Connect 在校园知识共享、个人记录保存、社区协作和网页归档方面受到以下项目的启发。实际保存的第三方源码及其许可单独列于 [工具目录](importers/README.md)；除此之外，下面的列举不表示本项目捆绑或依赖其代码，各项目仍适用各自的许可证和使用边界。
+Digital SZTU 在校园知识共享、个人记录保存、社区协作和网页归档方面受到以下项目的启发。实际保存的第三方源码及其许可单独列于 [工具目录](importers/README.md)；除此之外，下面的列举不表示本项目捆绑或依赖其代码，各项目仍适用各自的许可证和使用边界。
 
 - 本校信息整理：[SZTU-Information](https://github.com/Luv-Ray/SZTU-Information)。
 - 校园知识共享与社区协作：[zju-icicles](https://github.com/QSCTech/zju-icicles)、[SUSTechapplication](https://github.com/SUSTech-Application/SUSTechapplication)、[SJTU-Application](https://github.com/SurviveSJTU/SJTU-Application) 和 [SurviveSJTUManual](https://github.com/SurviveSJTU/SurviveSJTUManual)。

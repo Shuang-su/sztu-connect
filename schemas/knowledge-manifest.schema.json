@@ -1,7 +1,7 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "urn:sztu-connect:schema:knowledge-manifest:0.1.0",
-  "title": "SZTU Connect knowledge export manifest",
+  "title": "Digital SZTU knowledge export manifest",
   "type": "object",
   "additionalProperties": false,
   "required": [

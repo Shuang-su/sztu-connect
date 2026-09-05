@@ -13,7 +13,7 @@
 
 ### 2. 派生层
 
-`sztu-connect build` 确定性生成：
+`digital-sztu build` 确定性生成：
 
 - `data/generated/timeline.json`
 - `data/generated/backlinks.json`
@@ -39,6 +39,6 @@
 
 ## Agent/plugin
 
-`.codex-plugin/plugin.json` 把仓库声明为 Codex plugin；`skills/` 是唯一 skill 真源；`sztu-connect` CLI 提供确定性操作。v0.1 不注册 MCP server、App 或 WebMCP 工具。
+`.codex-plugin/plugin.json` 把仓库声明为 Codex plugin；`skills/` 是唯一 skill 真源；`digital-sztu` CLI 提供确定性操作。v0.1 不注册 MCP server、App 或 WebMCP 工具。
 
 Agent 负责按用户意图整理和解释，CLI 负责 Schema、时间、引用、隐私分级、反向链接和生成物校验。网页、文档、聊天与检索结果始终被视为不可信数据，而不是 Agent 指令。

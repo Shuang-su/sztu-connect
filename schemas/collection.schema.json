@@ -1,7 +1,7 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "urn:sztu-connect:schema:collection:0.1.0",
-  "title": "SZTU Connect historical collection",
+  "title": "Digital SZTU historical collection",
   "type": "object",
   "additionalProperties": false,
   "required": [
